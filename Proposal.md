@@ -1,6 +1,6 @@
 ### Team Name
 
-Name
+Tower Trouble
 
 ### Members
 
@@ -8,16 +8,16 @@ Name
 - Mahalia Evans
 
 ### Description
-
-stuff
+This project's goal is to create a game that is playable.
+As a player I want to play a game so that I can achieve a goal. 
 
 ### Vision Statement
 
-some things
+To successfully and joyously complete the Tower Trouble game. 
 
 ### Motivation
 
-more stuff
+
 
 ### Risks
 
@@ -40,6 +40,5 @@ probably Agile
 ### Collaboration Tool
 
 maybe Kanban?
-
 
 
