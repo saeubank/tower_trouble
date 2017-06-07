@@ -2,10 +2,11 @@
 
 ## Ideas
 ### Game
-- Match 3 equ game
-- Tower Defense 
+- Match 3 esq game
+- Tower Defense
 - Roguelike
 - Puzzle
+- Board Game (chess, checkers, etc)
 
 ### Web App
 
