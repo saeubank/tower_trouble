@@ -1,7 +1,13 @@
 # CSCI3308_Project
 
 ## Ideas
-- Game
+### Game
+- Match 3 equ game
+- Tower Defense 
+- Roguelike
+- Puzzle
+
+### Web App
 
 ## Framework
 - Language: c++
