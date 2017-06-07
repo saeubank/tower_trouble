@@ -17,10 +17,11 @@ To successfully and joyously complete the Tower Trouble game.
 
 ### Motivation
 
-As college students, in our spare time we want to entertain ourselves. Marjority of our group wanted to create a game so we decided to create Tower Trouble. 
+As college students, in our spare time we want to entertain ourselves with something fun and. Marjority of our group wanted to create a game so we decided to create Tower Trouble. 
 
 ### Risks
 
+- Overall: There is a possibility that the feature creep could occur during the development of this application and that __. There may also be a lack of access to the server for usability. 
 - Mahalia: For this project the main risk is the overall look an development of a gaming application 
 - Name: 
 - Name: 
@@ -28,20 +29,20 @@ As college students, in our spare time we want to entertain ourselves. Marjority
 
 ### Risk Mitigation Plan
 
-- Mahalia: 
+- Mahalia: Learn the basics of game application development and typical requirements for games. 
 - Name: 
 
 ### Version Control
 
-probably Git
+Github will be used for the version control of this desktop application.  
 
 ### Software Development Methodology
 
-probably Agile
+The Agile method will be used to prioritize capabilities of this project. 
 
 ### Collaboration Tool
 
-maybe Kanban?
+Slack and Trello will be used to communicate with each collaborator for the app development.
 
 
 
