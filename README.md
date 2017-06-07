@@ -1,18 +1,12 @@
 # CSCI3308_Project
 
-## Ideas
-### Game
-- Match 3 esq game
-- Tower Defense
-- Roguelike
-- Puzzle
-- Board Game (chess, checkers, etc)
 
-### Web App
-
-## Framework
+## About
+- Match 3 Tower Defense
 - Language: c++
 - Graphics Library: SDL2, OpenGL
+- Platform: Computer (Windows, Mac, Linux)
+- 2D gameplay
 
 ## ToDo
 
