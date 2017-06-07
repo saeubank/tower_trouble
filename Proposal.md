@@ -4,8 +4,8 @@ Name
 
 ### Members
 
-- Names
-- Names
+- Names 
+- Mahalia Evans
 
 ### Description
 
@@ -40,3 +40,6 @@ probably Agile
 ### Collaboration Tool
 
 maybe Kanban?
+
+
+
