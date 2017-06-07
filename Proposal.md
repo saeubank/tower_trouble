@@ -4,8 +4,11 @@ Tower Troublemakers
 
 ### Members
 
-- Names 
+- Name
 - Mahalia Evans
+- Name 
+- Name 
+- Name
 
 ### Description
 This project's goal is to create a game that is playable.
