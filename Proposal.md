@@ -1,42 +1,42 @@
-###Team Name
+### Team Name
 
 Name
 
-###Members
+### Members
 
 - Names
 - Names
 
-###Description
+### Description
 
 stuff
 
-###Vision Statement
+### Vision Statement
 
 some things
 
-###Motivation
+### Motivation
 
 more stuff
 
-###Risks
+### Risks
 
 - dangerous stuff
 - and things too
 
-###Risk Mitigation Plan
+### Risk Mitigation Plan
 
 - less dangerous stuff
 - better things
 
-###Version Control
+### Version Control
 
 probably Git
 
-###Software Development Methodology
+### Software Development Methodology
 
 probably Agile
 
-###Collaboration Tool
+### Collaboration Tool
 
 maybe Kanban?
