@@ -25,7 +25,7 @@ As college students, in our spare time we want to entertain ourselves with somet
 ### Risks
 
 - Overall: There is a possibility that the feature creep could occur during the development of this application and that the graphics could be more complex than anticipated. There may also be a lack of access to the server for usability. 
-- Mahalia: For this project the main risk is the overall look an development of a gaming application 
+- Mahalia: For this project the main risk is the overall design and development of a gaming application 
 - Name: 
 - Name: 
 - Name: 
