@@ -21,15 +21,20 @@ As college students, in our spare time we want to entertain ourselves with somet
 
 ### Risks
 
-- Overall: There is a possibility that the feature creep could occur during the development of this application and that __. There may also be a lack of access to the server for usability. 
+- Overall: There is a possibility that the feature creep could occur during the development of this application and that the graphics could be more complex than anticipated. There may also be a lack of access to the server for usability. 
 - Mahalia: For this project the main risk is the overall look an development of a gaming application 
+- Name: 
 - Name: 
 - Name: 
 - Name: 
 
 ### Risk Mitigation Plan
 
+- Overall: In order to prevent feature creep each member will stay updated on the Trello collaboration tool. 
 - Mahalia: Learn the basics of game application development and typical requirements for games. 
+- Name: 
+- Name: 
+- Name: 
 - Name: 
 
 ### Version Control
