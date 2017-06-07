@@ -1,6 +1,6 @@
 ### Team Name
 
-Tower Trouble
+Tower Troublemakers 
 
 ### Members
 
@@ -17,17 +17,19 @@ To successfully and joyously complete the Tower Trouble game.
 
 ### Motivation
 
-
+As college students, in our spare time we want to entertain ourselves. Marjority of our group wanted to create a game so we decided to create Tower Trouble. 
 
 ### Risks
 
-- dangerous stuff
-- and things too
+- Mahalia: For this project the main risk is the overall look an development of a gaming application 
+- Name: 
+- Name: 
+- Name: 
 
 ### Risk Mitigation Plan
 
-- less dangerous stuff
-- better things
+- Mahalia: 
+- Name: 
 
 ### Version Control
 
@@ -40,5 +42,6 @@ probably Agile
 ### Collaboration Tool
 
 maybe Kanban?
+
 
 
