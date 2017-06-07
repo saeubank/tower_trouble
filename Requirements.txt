@@ -4,7 +4,7 @@ Team Name
 Moniker to be used in all presentations and documentation
 
 Members	   
-List of the team members (First and Last names)
+Mahalia Evans
  	 
 Description	   
 Short description (2-3 paragraphs) of the project. Provide enough 
