@@ -1,4 +1,4 @@
-# CSCI3308_Project
+# Tower Trouble
 
 
 ## About
@@ -10,4 +10,4 @@
 
 ## ToDo
 
-## Mechanics
+## Features
