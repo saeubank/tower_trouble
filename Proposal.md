@@ -4,11 +4,11 @@ Tower Troublemakers
 
 ### Members
 
-- Name
+- Nelson Mitchell
 - Mahalia Evans
 - Samuel Eubanks 
-- Name 
-- Name
+- Jordan Dick 
+- Theodore Wise
 
 ### Description
 This project's goal is to create a game that is playable.
@@ -27,7 +27,7 @@ As college students, in our spare time we want to entertain ourselves with somet
 - Overall: There is a possibility that the feature creep could occur during the development of this application and that the graphics could be more complex than anticipated. There may also be a lack of access to the server for usability. 
 - Mahalia: For this project the main risk is the overall design and development of a gaming application 
 - Samuel: The main risk is over estimating what could be added into the project (aka planning for too much)
-- Name: 
+- Nelson: Overworking the front end and leaving a weak backend 
 - Name: 
 - Name: 
 
@@ -36,13 +36,14 @@ As college students, in our spare time we want to entertain ourselves with somet
 - Overall: In order to prevent feature creep each member will stay updated on the Trello collaboration tool. 
 - Mahalia: Learn the basics of game application development and typical requirements for games. 
 - Samuel: Start with basics and then build on top plan one new feature at a time
-- Name: 
+- Nelson: Develop the project as a whole 
 - Name: 
 - Name: 
 
 ### Version Control
 
-Github will be used for the version control of this desktop application.  
+Github will be used for the version control of this desktop application. Repo location:
+https://github.com/swamulism/tower_trouble
 
 ### Software Development Methodology
 
