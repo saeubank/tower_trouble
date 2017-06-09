@@ -20,7 +20,7 @@ To successfully and joyously complete the Tower Trouble game.
 
 ### Motivation
 
-As college students, in our spare time we want to entertain ourselves with something fun and. Marjority of our group wanted to create a game so we decided to create Tower Trouble. 
+As college students, in our spare time we want to entertain ourselves with something fun and even a bit silly. Marjority of our group wanted to create a game so we decided to create Tower Trouble. 
 
 ### Risks
 
