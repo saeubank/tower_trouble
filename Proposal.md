@@ -28,7 +28,7 @@ As college students, in our spare time we want to entertain ourselves with somet
 - Mahalia: For this project the main risk is the overall design and development of a gaming application 
 - Samuel: The main risk is over estimating what could be added into the project (aka planning for too much)
 - Nelson: Overworking the front end and leaving a weak backend 
-- Name: 
+- Jordan: Overcomplicating the mechanics and/or getting stuck on one task for too long
 - Name: 
 
 ### Risk Mitigation Plan
@@ -37,7 +37,7 @@ As college students, in our spare time we want to entertain ourselves with somet
 - Mahalia: Learn the basics of game application development and typical requirements for games. 
 - Samuel: Start with basics and then build on top plan one new feature at a time
 - Nelson: Develop the project as a whole 
-- Name: 
+- Jordan: regular check-ins to maintain momentum and keep the scope of the project reasonable
 - Name: 
 
 ### Version Control
