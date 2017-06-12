@@ -8,7 +8,7 @@ Tower Troublemakers
 - Mahalia Evans
 - Samuel Eubanks 
 - Jordan Dick 
-- Theodore Wise
+- T. Spencer Wise 
 
 ### Description
 This project's goal is to create a game that is playable.
@@ -29,7 +29,7 @@ As college students, in our spare time we want to entertain ourselves with somet
 - Samuel: The main risk is over estimating what could be added into the project (aka planning for too much)
 - Nelson: Overworking the front end and leaving a weak backend 
 - Jordan: Overcomplicating the mechanics and/or getting stuck on one task for too long
-- Name: 
+- Spencer: Developing a robust database and backend based on a game could be an issue. We need to be sure to keep an eye toward project requirements instead of getting overly wrapped up in game mechanics. 
 
 ### Risk Mitigation Plan
 
@@ -38,7 +38,7 @@ As college students, in our spare time we want to entertain ourselves with somet
 - Samuel: Start with basics and then build on top plan one new feature at a time
 - Nelson: Develop the project as a whole 
 - Jordan: regular check-ins to maintain momentum and keep the scope of the project reasonable
-- Name: 
+- Spencer: Make regular goals in class meetings and see how each game feature aids in meeting course requirements. 
 
 ### Version Control
 
