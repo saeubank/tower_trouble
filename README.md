@@ -1,7 +1,5 @@
 # Tower Trouble
 
-## About
-
 - Match 3 Tower Defense
 - Language: c++
 - Graphics Library: SDL2, OpenGL
