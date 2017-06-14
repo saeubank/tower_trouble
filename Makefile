@@ -30,12 +30,21 @@ game.o:game.cpp structures.h objects.h pixlight.vert pixlight.frag gaussian.frag
 structures.o:structures.cpp structures.h objects.h
 	g++ -std=c++11 -c $(CFLG) $<
 
+map.o:map.cpp map.h
+	g++ -std=c++11 -c $(CFLG) $<
+
+enemy.o:enemy.cpp enemy.h
+	g++ -std=c++11 -c $(CFLG) $<
+
+tower.o:tower.cpp tower.h enemy.h
+	g++ -std=c++11 -c $(CFLG) $<
+
 objects.o: objects.cpp objects.h
 	g++ -c $(CFLG) $<
 #	gcc -std=c99 -c $(CFLG) $<
 
 #  link
-run:game.o structures.o objects.o
+run:game.o map.o enemy.o tower.o objects.o
 	g++ -g -O3 -o run $^ $(LIBS)
 
 #  Clean

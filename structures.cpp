@@ -1,6 +1,6 @@
 #include "structures.h"
 
-Floor::Floor()
+Map::Map()
 {
 //   int newarr[81] = {0, 0, 0, 0, 0, 0, 0, 0, 0,  // it's a 2nd order Hilbert curve
 //                    -1,-1,-1,-1, 0,-1,-1,-1,-1, 
@@ -15,7 +15,7 @@ Floor::Floor()
 
 }
 
-void Floor::tile(float x, float y, float z, int direction)
+void Map::tile(float x, float y, float z, int direction)
 {
    glPushMatrix();
 
@@ -57,7 +57,7 @@ void Floor::tile(float x, float y, float z, int direction)
    glPopMatrix();
 }
 
-void Floor::render()
+void Map::render()
 {
    glPushMatrix();
    glTranslated(-8,0,-8);
@@ -152,7 +152,7 @@ void Floor::render()
    }
 }
 
-int Floor::animate()
+int Map::animate()
 {
    if (spawncount > 0 && currentwave >= 0)
    {
@@ -167,7 +167,7 @@ int Floor::animate()
    return 0;
 }
 
-void Floor::spawnwave()
+void Map::spawnwave()
 {
    if (spawncount <= 0)
    {
@@ -177,7 +177,7 @@ void Floor::spawnwave()
    }
 }
 
-int Floor::getlocation(float ex, float ey)
+int Map::getlocation(float ex, float ey)
 {
    int ix = (int)ex/2 + 4;
    int iy = -(int)ey/2 + 4;

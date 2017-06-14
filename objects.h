@@ -10,8 +10,8 @@
 #endif
 #endif
 
-#ifndef Jobjects
-#define Jobjects
+#ifndef objects_h
+#define objects_h
 
 #define Sin(x) (sin(x * 3.1415927/180))
 #define Cos(x) (cos(x * 3.1415927/180))

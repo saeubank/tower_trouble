@@ -1,5 +1,8 @@
 #include "objects.h"
 
+#ifndef map_H
+#define map_H
+
 class Map
 {
    int arr[81] = {0, 0, 0, 0, 0, 0, 0, 0, 0,  // it's a 2nd order Hilbert curve
@@ -34,48 +37,4 @@ public:
    int getlocation(float ex, float ey);
 };
 
-class Enemy
-{
-public:
-   float x, y, z, dx, dy, theta, speed;
-   //float a, b, c, w;
-   int health, type;
-   float s1, s2, ds1, ds2;
-   int movestate;
-
-   Enemy(float X, float Y, int Health, int Type);
-   void render();
-   void animate();
-   void damage(int dmg);
-};
-
-
-class Bullet
-{
-public:
-   float x, y, z, dx, dy, dz, speed;
-   int dmg;
-   Enemy** target;
-
-   Bullet(float X, float Y, float Z, Enemy** Target);
-   void render();
-   void animate();
-   void collide();
-   float distance();
-   void normalizeV();
-};
-
-class Tower
-{
-public:
-   float x, y, z, dx, dy, dz, range;
-   Enemy** target;
-   int cooldown, maxcooldown;
-   bool wireframe;
-
-   Tower(float X, float Y, bool mode);
-   void animate();
-   void render();
-   Bullet* fire();
-   float distance(Enemy** Target);
-};
+#endif
