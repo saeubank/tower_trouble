@@ -31,34 +31,34 @@ void pNormal(double th1, double ph1, double th2, double ph2, double th3, double 
 
 //Sphere function nabbed from ex8 and slightly modified
 void ball(double x, double y, double z,
-          double s);
+             double s);
 
 //Sphere function nabbed from ex8 and slightly modified
 void sphere(double x, double y, double z,
-            double r,
-            double s);
+                double r,
+                double s);
 
 void torus(double x, double y, double z,
-           double r,
-           double s);
+              double r,
+              double s);
 
 void cube(double x, double y, double z,
-          double r,
-          double s);
+             double r,
+             double s);
 
 
 void octahedron(double x, double y, double z,
-                 double r,
-                 double s);
+                      double r,
+                      double s);
 
 
 void dodecahedron(double x, double y, double z,
-                 double r,
-                 double s);
+                      double r,
+                      double s);
 
 
 void icosahedron(double x, double y, double z,
-                 double r,
-                 double s);
+                      double r,
+                      double s);
 
 #endif
