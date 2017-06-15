@@ -1,6 +1,10 @@
 # Milestone 2
+Team: Samuel Eubanks, Nelson Michell, Jordan Dick, Theodore Wise, Mahalia Evans
 
 ## Project management tools
+
+- Trello
+- Slack
 
 ## User stories
 
@@ -25,4 +29,19 @@ User Stories:
        - database with names as primary key to store scores
        - game exports highscores in compact readable format
 
-## Scrum & dates
+## Sprint dates
+
+- Sprint 1
+   - Start on 6/19/2017
+   - Ends on 6/25/2017
+   - Goal: Have MVP up
+   
+- Sprint 2
+   - Start on 6/25/2017
+   - Ends on 7/2/2017
+   - Goal: Add gameplay
+   
+- Sprint 3
+   - Start on 7/3/2017
+   - End on 7/6/2017
+   - Goal: Debug game
