@@ -8,7 +8,6 @@ Team: Samuel Eubanks, Nelson Michell, Jordan Dick, Theodore Wise, Mahalia Evans
 
 ## User stories
 
-User Stories:
    - As a player i want to see my progress:
        - Track score
        - Show score on screen
