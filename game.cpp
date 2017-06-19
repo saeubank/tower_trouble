@@ -562,6 +562,116 @@ void keyboard(const Uint8* state)
         dzoom = 0;
 }
 
+// all user interaction goes here
+void handleEvents()
+{
+    SDL_Event event;
+
+    while (SDL_PollEvent(&event))
+    {
+        switch(event.type)
+        {
+            case SDL_QUIT:
+                quit = true;
+                break;
+
+            case SDL_KEYDOWN:
+                if (mode == 1)
+                {
+                    if (event.key.keysym.scancode == SDL_SCANCODE_Q)
+                    {
+                        // Enter Tower Placement Mode
+                        mode = 0;
+                        cursorx = 0;
+                        cursory = 0;
+                        int i = 0;
+                        while (towers[i] != NULL)
+                            ++i;
+                        towers[i] = new Tower(cursorx, cursory, 1);
+                        placement_tower = &towers[i];
+                    }
+                }
+                else //mode == 0 aka Tower Placement Mode
+                {
+                    switch (event.key.keysym.scancode)
+                    {
+                        case SDL_SCANCODE_W:
+                            cursory += 2.0;
+                            (*placement_tower)->y = cursory;
+                            break;
+                        case SDL_SCANCODE_S:
+                            cursory -= 2.0;
+                            (*placement_tower)->y = cursory;
+                            break;
+                        case SDL_SCANCODE_D:
+                            cursorx += 2.0;
+                            (*placement_tower)->x = cursorx;
+                            break;
+                        case SDL_SCANCODE_A:
+                            cursorx -= 2.0;
+                            (*placement_tower)->x = cursorx;
+                            break;
+                        case SDL_SCANCODE_RETURN:
+                            //Activate the Tower and Exit Placement Mode
+                            if (F.getlocation(cursorx, cursory) == 0.0)
+                            {
+                                (*placement_tower)->wireframe = false;
+                                placement_tower = NULL;
+                                mode = 1;
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                if (event.key.keysym.scancode == SDL_SCANCODE_SPACE)
+                    pause = 1 - pause;
+                else if (event.key.keysym.scancode == SDL_SCANCODE_M || event.key.keysym.scancode == SDL_SCANCODE_N)
+                {
+                    if (event.key.keysym.scancode == SDL_SCANCODE_M)
+                    {
+                        // DEMO
+                        if (F.currentwave < 3)
+                            F.currentwave = 3;
+
+                        if (towers[0] == NULL)
+                            towers[0] = new Tower(0.0, 4.0, 0);
+                        if (towers[1] == NULL)
+                            towers[1] = new Tower(-4.0, -4.0, 0);
+                        if (towers[2] == NULL)
+                            towers[2] = new Tower(4.0, -4.0, 0);
+                        if (towers[3] == NULL)
+                            towers[3] = new Tower(-4.0, 0.0, 0);
+                        if (towers[4] == NULL)
+                            towers[4] = new Tower(4.0, 0.0, 0);
+                        if (towers[5] == NULL)
+                            towers[5] = new Tower(0.0, -4.0, 0);
+                    }
+                    F.spawnwave();
+                }
+                else if (event.key.keysym.scancode == SDL_SCANCODE_0)
+                {
+                    th = 0;
+                    ph = 40;
+                }
+                //else
+                //{
+                //    const Uint8* state = SDL_GetKeyboardState(NULL);
+                //    keyboard(state);
+                //}
+                break;
+
+            case SDL_WINDOWEVENT:
+                if (event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED)
+                {
+                    //cerr << event.window.data1 << " " << event.window.data2 << endl;
+                    reshape(event.window.data1, event.window.data2);
+                }
+                break;
+        }
+    }
+}
+
 int main(int argc, char *argv[])
 {
     //Initialize
@@ -597,114 +707,12 @@ int main(int argc, char *argv[])
 
     int startuptime = SDL_GetTicks();
 
-    SDL_Event event;
 
     ////////Main Loop////////
     while (!quit)
     {
-        while (SDL_PollEvent(&event))
-        {
-            switch(event.type)
-            {
-                case SDL_QUIT:
-                    quit = true;
-                    break;
+        handleEvents();
 
-                case SDL_KEYDOWN:
-                    if (mode == 1)
-                    {
-                        if (event.key.keysym.scancode == SDL_SCANCODE_Q)
-                        {
-                            // Enter Tower Placement Mode
-                            mode = 0;
-                            cursorx = 0;
-                            cursory = 0;
-                            int i = 0;
-                            while (towers[i] != NULL)
-                                ++i;
-                            towers[i] = new Tower(cursorx, cursory, 1);
-                            placement_tower = &towers[i];
-                        }
-                    }
-                    else //mode == 0 aka Tower Placement Mode
-                    {
-                        switch (event.key.keysym.scancode)
-                        {
-                            case SDL_SCANCODE_W:
-                                cursory += 2.0;
-                                (*placement_tower)->y = cursory;
-                                break;
-                            case SDL_SCANCODE_S:
-                                cursory -= 2.0;
-                                (*placement_tower)->y = cursory;
-                                break;
-                            case SDL_SCANCODE_D:
-                                cursorx += 2.0;
-                                (*placement_tower)->x = cursorx;
-                                break;
-                            case SDL_SCANCODE_A:
-                                cursorx -= 2.0;
-                                (*placement_tower)->x = cursorx;
-                                break;
-                            case SDL_SCANCODE_RETURN:
-                                //Activate the Tower and Exit Placement Mode
-                                if (F.getlocation(cursorx, cursory) == 0.0)
-                                {
-                                    (*placement_tower)->wireframe = false;
-                                    placement_tower = NULL;
-                                    mode = 1;
-                                }
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-                    if (event.key.keysym.scancode == SDL_SCANCODE_SPACE)
-                        pause = 1 - pause;
-                    else if (event.key.keysym.scancode == SDL_SCANCODE_M || event.key.keysym.scancode == SDL_SCANCODE_N)
-                    {
-                        if (event.key.keysym.scancode == SDL_SCANCODE_M)
-                        {
-                            // DEMO
-                            if (F.currentwave < 3)
-                                F.currentwave = 3;
-
-                            if (towers[0] == NULL)
-                                towers[0] = new Tower(0.0, 4.0, 0);
-                            if (towers[1] == NULL)
-                                towers[1] = new Tower(-4.0, -4.0, 0);
-                            if (towers[2] == NULL)
-                                towers[2] = new Tower(4.0, -4.0, 0);
-                            if (towers[3] == NULL)
-                                towers[3] = new Tower(-4.0, 0.0, 0);
-                            if (towers[4] == NULL)
-                                towers[4] = new Tower(4.0, 0.0, 0);
-                            if (towers[5] == NULL)
-                                towers[5] = new Tower(0.0, -4.0, 0);
-                        }
-                        F.spawnwave();
-                    }
-                    else if (event.key.keysym.scancode == SDL_SCANCODE_0)
-                    {
-                        th = 0;
-                        ph = 40;
-                    }
-                    else
-                    {
-                        const Uint8* state = SDL_GetKeyboardState(NULL);
-                        keyboard(state);
-                    }
-                    break;
-
-                case SDL_WINDOWEVENT:
-                    if (event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED)
-                    {
-                        //cerr << event.window.data1 << " " << event.window.data2 << endl;
-                        reshape(event.window.data1, event.window.data2);
-                    }
-                    break;
-            }
-        }
         //// PHYSICS TIMING ////
         r = SDL_GetTicks();
         dr += r - oldr;
