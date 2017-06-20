@@ -682,9 +682,9 @@ int main(int argc, char *argv[])
     }
     
     //compile shaders
-    shader = CreateShaderProg((char*)"pixlight.vert",(char*)"pixlight.frag");
-    filter = CreateShaderProg(NULL, (char*)"gaussian.frag");
-    blend  = CreateShaderProg(NULL, (char*)"blender.frag");
+    shader = CreateShaderProg((char*)"source/pixlight.vert",(char*)"source/pixlight.frag");
+    filter = CreateShaderProg(NULL, (char*)"source/gaussian.frag");
+    blend  = CreateShaderProg(NULL, (char*)"source/blender.frag");
     
     //create and configure textures for filters
     glGenTextures(1,&img);
