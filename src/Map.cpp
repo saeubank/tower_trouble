@@ -29,14 +29,14 @@ void Map::setTile(Tile tile, Position pos) {
 	map[pos.x][pos.y] = tile;
 }
 
-bool isEmpty(Position pos) {
+bool Map::isEmpty(Position pos) {
 	if (pos.x >= width || pos.x < 0 || pos.y >= height || y < 0) {
 		return false;
 	}
 	return map[pos].tileType == TileType::GROUND;
 }
 
-bool setTower(TileType tower, Position pos) {
+bool Map::setTower(TileType tower, Position pos) {
 	if (isEmpty(pos)) {
 		map[pos].tileType = TileType::tower;
 		return true;
@@ -56,17 +56,29 @@ std::vector<Position> AStar(Position start, Position end) {
 	std::vector<Position> path;
 	int cost = 0;
 
+	PriorityQueue<Position, int> frontier;
+	frontier.put(start, getHValue(start, end));
+
+	while (!frontier.empty()) {
+		auto cur = frontier.get();
+		if (cur == end) {
+			return path;
+		}
+		for (auto next : )
+	}
+
 }
 
 void Map::makeMap() {
 	for(int i = 0; i < width; i++) {
 		for(int j = 0; j < height; j++) {
-			if(i == 0 || i == width - 1 || j == 0 || j == height - 1) {
-				map[i][j].tileType = TileType::NOTHING;
-			}
-			else {
-				map[i][j].tileType = TileType::GROUND;
-			}
+			map[i][j].tileType = TileType::GROUND;
+			// if(i == 0 || i == width - 1 || j == 0 || j == height - 1) {
+			// 	map[i][j].tileType = TileType::NOTHING;
+			// }
+			// else {
+			// 	map[i][j].tileType = TileType::GROUND;
+			// }
 		}
 	}
 }
