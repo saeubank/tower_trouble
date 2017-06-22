@@ -5,9 +5,9 @@
 
 #ifndef STDIncludes
 #define STDIncludes
-#include <stdlib.h>
-#include <stdio.h>
-#include <math.h>
+#include <cstdlib>
+#include <cstdio>
+#include <cmath>
 #ifdef __APPLE__
 #include <OpenGL/glu.h>
 #else
