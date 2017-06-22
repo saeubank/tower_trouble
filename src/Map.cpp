@@ -62,24 +62,19 @@ std::vector<Position> AStar(Position start, Position end) {
     unordered_map<Position, double> cost_so_far;
 	came_from[start] = start;
     cost_so_far[start] = 0;
+	std::vector<Position> path;
 
 	while (!open.empty()) {
 		auto cur = open.get();
 		if (cur == end) {
+			// insert reconstruct path here.
 			return path;
 		}
 		for (auto next : )
 	}
-
+	return path;
 }
 
-//   while (!frontier.empty()) {
-//     auto current = frontier.get();
-//
-//     if (current == goal) {
-//       break;
-//     }
-//
 //     for (auto& next : graph.neighbors(current)) {
 //       double new_cost = cost_so_far[current] + graph.cost(current, next);
 //       if (!cost_so_far.count(next) || new_cost < cost_so_far[next]) {

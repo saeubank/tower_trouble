@@ -17,6 +17,7 @@ struct Tile {
 	Tile(TileType tileType): tileType(tileType) {}
 };
 
+// from http://www.redblobgames.com/pathfinding/a-star/implementation.html
 template<typename T, typename priority_t>
 struct PriorityQueue {
   typedef pair<priority_t, T> PQElement;
