@@ -55,10 +55,16 @@ double getHValue(Position cur, Position end) {
 std::vector<Position> AStar(Position start, Position end) {
 	std::vector<Position> closed;
 	int cost = 0;
-	priority_queue<tuple<Position, int, double>, std::vector<Position, int, double>, greater<Position, int, double>>> open;
-	open.push(start, cost, getHValue(start, end));
+	//priority_queue<tuple<Position, double>, std::vector<Position, double>, greater<Position, double>>> open;
+	PriorityQueue<Position, double> open;
+	open.put(start, getHValue(start, end));
+	unordered_map<Position, Position> came_from;
+    unordered_map<Position, double> cost_so_far;
+	came_from[start] = start;
+    cost_so_far[start] = 0;
+
 	while (!open.empty()) {
-		auto cur = frontier.get();
+		auto cur = open.get();
 		if (cur == end) {
 			return path;
 		}
@@ -67,62 +73,24 @@ std::vector<Position> AStar(Position start, Position end) {
 
 }
 
-
-// int AStarFindPath(const int nStartX, const int nStartY,
-// 		  const int nTargetX, const int nTargetY,
-// 		  const unsigned char* pMap, const int nMapWidth, const int nMapHeight,
-// 		  int* pOutBuffer, const int nOutBufferSize) {
+//   while (!frontier.empty()) {
+//     auto current = frontier.get();
 //
-//   auto idx = [nMapWidth](int x, int y) {
-//     return x + y*nMapWidth;
-//   };
+//     if (current == goal) {
+//       break;
+//     }
 //
-//   auto h = [=](int u) -> int { // lower bound distance to target from u
-//     int x = u % nMapWidth, y = u / nMapWidth;
-//     return abs(x-nTargetX) + abs(y-nTargetY);
-//   };
-//
-//   const int n = nMapWidth*nMapHeight;
-//   const int startPos = idx(nStartX, nStartY), targetPos = idx(nTargetX, nTargetY);
-//
-//   int discovered = 0; ExploredNodes = 0;
-//   vector<int> p(n), d(n, INT_MAX);
-//   priority_queue<tuple<int, int, int>,
-// 		 vector<tuple<int, int, int>>,
-// 		 greater<tuple<int, int, int>>> pq; // A* with tie breaking
-//   d[startPos] = 0;
-//   pq.push(make_tuple(0 + h(startPos), 0, startPos));
-//   while (!pq.empty()) {
-//     int u = get<2>(pq.top()); pq.pop(); ExploredNodes++;
-//     for (auto e : {+1, -1, +nMapWidth, -nMapWidth}) {
-//       int v = u + e;
-//       if ((e == 1 && (v % nMapWidth == 0)) || (e == -1 && (u % nMapWidth == 0)))
-// 	continue;
-//       if (0 <= v && v < n && d[v] > d[u] + 1 && pMap[v]) {
-// 	p[v] = u;
-// 	d[v] = d[u] + 1;
-// 	if (v == targetPos)
-// 	  goto end;
-// 	pq.push(make_tuple(d[v] + h(v), ++discovered, v));
+//     for (auto& next : graph.neighbors(current)) {
+//       double new_cost = cost_so_far[current] + graph.cost(current, next);
+//       if (!cost_so_far.count(next) || new_cost < cost_so_far[next]) {
+//         cost_so_far[next] = new_cost;
+//         double priority = new_cost + heuristic(next, goal);
+//         frontier.put(next, priority);
+//         came_from[next] = current;
 //       }
 //     }
 //   }
-//  end:
-//
-//   if (d[targetPos] == INT_MAX) {
-//     return -1;
-//   } else if (d[targetPos] <= nOutBufferSize) {
-//     int curr = targetPos;
-//     for (int i = d[targetPos] - 1; i >= 0; i--) {
-//       pOutBuffer[i] = curr;
-//       curr = p[curr];
-//     }
-//     return d[targetPos];
-//   }
-//
-//   return d[targetPos]; // buffer size too small
 // }
-
 
 void Map::makeMap() {
 	for(int i = 0; i < width; i++) {
