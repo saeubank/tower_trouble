@@ -1,4 +1,4 @@
-#include "map.h"
+#include "Map.hpp"
 #include <vector>
 #include <cmath>
 #include <queue>
@@ -88,13 +88,7 @@ std::vector<Position> AStar(Position start, Position end) {
 	while (!open.empty()) {
 		auto cur = open.get();
 		if (cur == end) {
-			path.push_back(cur);
-		    while (current != start) {
-		        cur = came_from[cur];
-		        path.push_back(cur);
-			}
-		    path.push_back(start)
-		    std::reverse(path.begin(), path.end());
+			// insert reconstruct path here.
 			return path;
 		}
 		for (auto& next : getNeighbors(cur)) {
