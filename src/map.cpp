@@ -80,15 +80,21 @@ std::vector<Position> AStar(Position start, Position end) {
 	PriorityQueue<Position, double> open;
 	open.put(start, getHValue(start, end));
 	std::unordered_map<Position, Position> came_from;
-    std::unordered_map<Position, double> cost_so_far;
+	std::unordered_map<Position, double> cost_so_far;
 	came_from[start] = start;
-    cost_so_far[start] = 0;
+	cost_so_far[start] = 0;
 	std::vector<Position> path;
 
 	while (!open.empty()) {
 		auto cur = open.get();
 		if (cur == end) {
-			// insert reconstruct path here.
+			path.push_back(cur);
+			while (current != start) {
+				cur = came_from[cur];
+				path.push_back(cur);
+			}
+			path.push_back(start)
+			std::reverse(path.begin(), path.end());
 			return path;
 		}
 		for (auto& next : getNeighbors(cur)) {
