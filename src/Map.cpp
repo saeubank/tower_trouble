@@ -47,6 +47,27 @@ bool Map::setTower(TileType tower, Position pos) {
 	return false;
 }
 
+std::vector<Position> getNeighbors(Position pos) {
+	std::vector<Position> neighbors;
+	Position up = Position(pos.x - 1, pos.y);
+	Position down = Position(pos.x + 1, pos.y);
+	Position left = Position(pos.x, pos.y - 1);
+	Position right = Position(pos.x, pos.y + 1);
+	if (isEmpty(up)) {
+		neighbors.push_back(up);
+	}
+	if (isEmpty(down)) {
+		neighbors.push_back(down);
+	}
+	if (isEmpty(left)) {
+		neighbors.push_back(left);
+	}
+	if (isEmpty(right)) {
+		neighbors.push_back(right);
+	}
+	return neighbors;
+}
+
 double getHValue(Position cur, Position end) {
 	return sqrt(pow((cur.x - end.x), 2) + pow((cur.y - end.y), 2));
 }
@@ -58,8 +79,8 @@ std::vector<Position> AStar(Position start, Position end) {
 	//priority_queue<tuple<Position, double>, std::vector<Position, double>, greater<Position, double>>> open;
 	PriorityQueue<Position, double> open;
 	open.put(start, getHValue(start, end));
-	unordered_map<Position, Position> came_from;
-    unordered_map<Position, double> cost_so_far;
+	std::unordered_map<Position, Position> came_from;
+    std::unordered_map<Position, double> cost_so_far;
 	came_from[start] = start;
     cost_so_far[start] = 0;
 	std::vector<Position> path;
@@ -70,22 +91,18 @@ std::vector<Position> AStar(Position start, Position end) {
 			// insert reconstruct path here.
 			return path;
 		}
-		for (auto next : )
+		for (auto& next : getNeighbors(cur)) {
+	      	double new_cost = cost_so_far[cur] + graph.cost(cur, next);
+	      	if (!cost_so_far.count(next) || new_cost < cost_so_far[next]) {
+	        	cost_so_far[next] = new_cost;
+	        	double priority = new_cost + getHValue(next, end);
+	        	frontier.put(next, priority);
+	        	came_from[next] = current;
+	      }
+	    }
 	}
 	return path;
 }
-
-//     for (auto& next : graph.neighbors(current)) {
-//       double new_cost = cost_so_far[current] + graph.cost(current, next);
-//       if (!cost_so_far.count(next) || new_cost < cost_so_far[next]) {
-//         cost_so_far[next] = new_cost;
-//         double priority = new_cost + heuristic(next, goal);
-//         frontier.put(next, priority);
-//         came_from[next] = current;
-//       }
-//     }
-//   }
-// }
 
 void Map::makeMap() {
 	for(int i = 0; i < width; i++) {
