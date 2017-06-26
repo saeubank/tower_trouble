@@ -43,15 +43,6 @@ struct PriorityQueue {
 
 class Map
 {
-    int arr[81] = {0, 0, 0, 0, 0, 0, 0, 0, 0,  // it's a 2nd order Hilbert curve
-                      -1,-1,-1,-1, 0,-1,-1,-1,-1,
-                        0, 0, 0,-1, 0,-1, 0, 0, 0,
-                        0,-1,-1,-1, 0,-1,-1,-1, 0,
-                        0,-1, 0, 0, 0, 0, 0,-1, 0,
-                        0,-1, 0,-1,-1,-1, 0,-1, 0,
-                        0,-1, 0,-1, 0,-1, 0,-1, 0,
-                        0,-1,-1,-1, 0,-1,-1,-1, 0,
-                        0, 0, 0, 0, 0, 0, 0, 0, 0};
     int waves[9][10] = {{2, 2, 2, 2, 2, 0, 0, 0, 0, 0},
                               {2, 2, 2, 2, 2, 2, 2, 2, 2, 2},
                               {1, 1, 1, 1, 1, 1, 1, 1, 0, 0},
@@ -64,30 +55,35 @@ class Map
     int wavetime = 600;
     int currentwavetime = 0;
     int spawncount = -1;
+	int lives;
 
     int width, height;
 	std::vector<std::vector<Tile>> map;
 
 	void makeMap();
 public:
-    int lives = 20;
     int currentwave = -1;
-    Map();
-    void tile(float x, float y, float z, int direction);
+    void renderTile(float x, float y, float z);
     void render();
-    int animate();
-    void spawnwave();
+    int spawnEnemy();
+    void spawnWave();
     int getlocation(float ex, float ey);
 
-    Map(int width, int height);
+    Map(int width, int height, int lives);
     int getWidth() const;
     int getHeight() const;
+	int getLives() const;
+	void setLives(int x);
+	void decrementLives();
     Tile & operator[](Position pos);
     const Tile & operator[](Position pos) const;
     Tile getTile(Position pos) const;
     void setTile(Tile tile, Position pos);
     bool isEmpty(Position pos);
     bool setTower(TileType tower, Position pos);
+	std::vector<Position> getNeighbors(Position pos);
+	float getHValue(Position cur, Position end);
+	std::vector<Position> AStar(Position start, Position end);
 };
 
 #endif

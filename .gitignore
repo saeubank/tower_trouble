@@ -31,3 +31,6 @@
 *.out
 *.app
 run
+
+# Personal stuff
+*.vimcludes

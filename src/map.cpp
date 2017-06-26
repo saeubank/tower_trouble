@@ -4,7 +4,7 @@
 #include <queue>
 #include <tuple>
 
-Map::Map(int width, int height): width(width), height(height), map(width, std::vector<Tile>(height, Tile(TileType::GRASS))) {
+Map::Map(int width, int height, int lives): width(width), height(height), lives(lives) {
 	makeMap();
 }
 
@@ -14,6 +14,18 @@ int Map::getWidth() const {
 
 int Map::getHeight() const {
 	return height;
+}
+
+int getLives() const {
+	return lives;
+}
+
+void setLives(int x) {
+	lives = x;
+}
+
+void decrementLives() {
+	lives = getLives() - 1;
 }
 
 Tile & Map::operator[](Position pos) {
@@ -32,6 +44,105 @@ void Map::setTile(Tile tile, Position pos) {
 	map[pos.x][pos.y] = tile;
 }
 
+void Map::renderTile(float x, float y, float z) {
+    glPushMatrix();
+
+    glTranslated(x, y, z);
+
+    glBegin(GL_TRIANGLES);
+    glNormal3d(0.10,1,0);
+    glVertex3d(0,1.10,0);
+    glVertex3d(1,1,1);
+    glVertex3d(1,1,-1);
+
+    glNormal3d(0,1,-0.10);
+    glVertex3d(0,1.10,0);
+    glVertex3d(1,1,-1);
+    glVertex3d(-1,1,-1);
+
+    glNormal3d(-0.10,1,0);
+    glVertex3d(0,1.10,0);
+    glVertex3d(-1,1,-1);
+    glVertex3d(-1,1,1);
+
+    glNormal3d(0,1,0.10);
+    glVertex3d(0,1.10,0);
+    glVertex3d(-1,1,1);
+    glVertex3d(1,1,1);
+    glEnd();
+
+    glPopMatrix();
+}
+
+void Map::render() {
+    glPushMatrix();
+    glTranslated(-8,0,-8);
+
+    for (int i = 0; i < map.getWidth(); ++i) {
+        for (int j = 0; j < map.getHeight(); ++j) {
+            renderTile(i * 2, 0, j * 2);
+        }
+    }
+    glPopMatrix();
+
+    if (getLives() > 0) {
+        glColor3f(0.4,0.8,0.4);
+        float emission[4] = {0.0,0.4,0.0,1.0};
+        glMaterialfv(GL_FRONT, GL_EMISSION, emission);
+        for (int i = 0; i < lives; ++i) {
+            if (i < 2) {
+                cube(8.5, 1.5*i, -6.0, 0, 1.0);
+            }
+            else {
+                cube(10.0, 1.5*(i%2), -6.0 + 1.5*((i-2)/2), 0, 1.0);
+            }
+        }
+    }
+    else {
+        bool pixels[7][53] = {{0,1,1,1,0, 0, 0,1,1,1,0, 0, 0,1,0,1,0, 0, 1,1,1,1,1, 0, 0,0,0,0,0, 0, 0,1,1,1,0, 0, 1,0,0,0,1, 0, 1,1,1,1,1, 0, 1,1,1,1,0},
+                                     {1,0,0,0,1, 0, 1,0,0,0,1, 0, 1,0,1,0,1, 0, 1,0,0,0,0, 0, 0,0,0,0,0, 0, 1,0,0,0,1, 0, 1,0,0,0,1, 0, 1,0,0,0,0, 0, 1,0,0,0,1},
+                                     {1,0,0,0,0, 0, 1,0,0,0,1, 0, 1,0,1,0,1, 0, 1,0,0,0,0, 0, 0,0,0,0,0, 0, 1,0,0,0,1, 0, 1,0,0,0,1, 0, 1,0,0,0,0, 0, 1,0,0,0,1},
+                                     {1,0,1,1,1, 0, 1,1,1,1,1, 0, 1,0,1,0,1, 0, 1,1,1,1,0, 0, 0,0,0,0,0, 0, 1,0,0,0,1, 0, 1,0,0,0,1, 0, 1,1,1,1,0, 0, 1,1,1,1,0},
+                                     {1,0,0,0,1, 0, 1,0,0,0,1, 0, 1,0,1,0,1, 0, 1,0,0,0,0, 0, 0,0,0,0,0, 0, 1,0,0,0,1, 0, 1,0,0,0,1, 0, 1,0,0,0,0, 0, 1,0,1,0,0},
+                                     {1,0,0,0,1, 0, 1,0,0,0,1, 0, 1,0,1,0,1, 0, 1,0,0,0,0, 0, 0,0,0,0,0, 0, 1,0,0,0,1, 0, 0,1,0,1,0, 0, 1,0,0,0,0, 0, 1,0,0,1,0},
+                                     {1,1,1,1,1, 0, 1,0,0,0,1, 0, 1,0,1,0,1, 0, 1,1,1,1,1, 0, 0,0,0,0,0, 0, 0,1,1,1,0, 0, 0,0,1,0,0, 0, 1,1,1,1,1, 0, 1,0,0,0,1}};
+        glColor3f(0.9,0.9,0.9);
+        glPushMatrix();
+        for (float th=0.0; th <= 271.0; th += 90) {
+            glRotated(th, 0,1,0);
+            for (int i=0; i<53; ++i) {
+                for (int j=0; j<7;++j) {
+                    if (pixels[j][i])
+                        cube(2.5-0.1*i,4-0.1*j,9.0, 0, 0.1/sqrt(2.0));
+                }
+            }
+        }
+        glPopMatrix();
+    }
+}
+
+int Map::spawnEnemy() {
+    if (spawncount > 0 && currentwave >= 0) {
+        currentwavetime += 16;
+        if (currentwavetime >= wavetime) {
+            currentwavetime -= wavetime;
+            spawncount -= 1;
+            return waves[currentwave][9-spawncount];
+        }
+    }
+    return 0;
+}
+
+void Map::spawnWave()
+{
+    if (spawncount <= 0)
+    {
+        if (currentwave < 8)
+            currentwave += 1;
+        spawncount = 10;
+    }
+}
+
 bool Map::isEmpty(Position pos) {
 	if (pos.x >= width || pos.x < 0 || pos.y >= height || y < 0) {
 		return false;
@@ -47,7 +158,7 @@ bool Map::setTower(TileType tower, Position pos) {
 	return false;
 }
 
-std::vector<Position> getNeighbors(Position pos) {
+std::vector<Position> Map::getNeighbors(Position pos) {
 	std::vector<Position> neighbors;
 	Position up = Position(pos.x - 1, pos.y);
 	Position down = Position(pos.x + 1, pos.y);
@@ -68,19 +179,18 @@ std::vector<Position> getNeighbors(Position pos) {
 	return neighbors;
 }
 
-double getHValue(Position cur, Position end) {
+float Map::getHValue(Position cur, Position end) {
 	return sqrt(pow((cur.x - end.x), 2) + pow((cur.y - end.y), 2));
 }
 
 
-std::vector<Position> AStar(Position start, Position end) {
+std::vector<Position> Map::AStar(Position start, Position end) {
 	std::vector<Position> closed;
 	int cost = 0;
-	//priority_queue<tuple<Position, double>, std::vector<Position, double>, greater<Position, double>>> open;
-	PriorityQueue<Position, double> open;
+	PriorityQueue<Position, float> open;
 	open.put(start, getHValue(start, end));
 	std::unordered_map<Position, Position> came_from;
-	std::unordered_map<Position, double> cost_so_far;
+	std::unordered_map<Position, float> cost_so_far;
 	came_from[start] = start;
 	cost_so_far[start] = 0;
 	std::vector<Position> path;
@@ -98,10 +208,10 @@ std::vector<Position> AStar(Position start, Position end) {
 			return path;
 		}
 		for (auto& next : getNeighbors(cur)) {
-	      	double new_cost = cost_so_far[cur] + graph.cost(cur, next);
+	      	float new_cost = cost_so_far[cur] + graph.cost(cur, next);
 	      	if (!cost_so_far.count(next) || new_cost < cost_so_far[next]) {
 	        	cost_so_far[next] = new_cost;
-	        	double priority = new_cost + getHValue(next, end);
+	        	float priority = new_cost + getHValue(next, end);
 	        	frontier.put(next, priority);
 	        	came_from[next] = current;
 	      	}

@@ -65,7 +65,7 @@ float Ambient[4];
 float Diffuse[4];
 float Specular[4];
 float shininess[1];
-float Position[4]; 
+float Position[4];
 float ltheta = 0.0;
 
 //Textures
@@ -127,7 +127,7 @@ bool init()
         cerr << "SDL failed to create OpenGL context: " << SDL_GetError() << endl;
         success = false;
     }
-    
+
     //Vsync
     if (SDL_GL_SetSwapInterval(0) < 0)
     {
@@ -368,7 +368,7 @@ void physics()
         Position[2] = 4.5*cos(ltheta);
 
         //Manage the Spawning of Waves
-        int newenemy = F.animate();
+        int newenemy = F.spawnEnemy();
         if (newenemy)
         {
             int i = 0;
@@ -383,13 +383,13 @@ void physics()
             if (enemies[i] != NULL)
             {
                 enemies[i]->animate();
-            
+
                 if (enemies[i]->x == 8.0 && enemies[i]->y == 6.0)
                 {
-                    F.lives -= 1;
+                    F.decrementLives();
                     delete enemies[i];
                     enemies[i] = NULL;
-                    if (F.lives <= 0)
+                    if (F.getLives() <= 0)
                         GameOver();
                 }
             }
@@ -527,7 +527,7 @@ void reshape(int width, int height)
     //switch to projection matrix
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    
+
     //adjust projection
     gluPerspective(60, w2h, 0.5, 20*4);
 
@@ -541,7 +541,7 @@ void keyboard(const Uint8* state)
 {
     if (state[SDL_SCANCODE_ESCAPE])
         quit = true;
-    
+
     if (state[SDL_SCANCODE_LEFT])
         dth = 0.5;
     else if (state[SDL_SCANCODE_RIGHT])
@@ -612,8 +612,9 @@ void handleEvents()
                             (*placement_tower)->x = cursorx;
                             break;
                         case SDL_SCANCODE_RETURN:
-                            //Activate the Tower and Exit Placement Mode
-                            if (F.getlocation(cursorx, cursory) == 0.0)
+                            //Activate the Tower and Exit Placement
+                            Position cursorPos(cursorx, cursory);
+                            if (F.isEmpty(cursorPos))
                             {
                                 (*placement_tower)->wireframe = false;
                                 placement_tower = NULL;
@@ -647,7 +648,7 @@ void handleEvents()
                         if (towers[5] == NULL)
                             towers[5] = new Tower(0.0, -4.0, 0);
                     }
-                    F.spawnwave();
+                    F.spawnWave();
                 }
                 else if (event.key.keysym.scancode == SDL_SCANCODE_0)
                 {
@@ -680,12 +681,12 @@ int main(int argc, char *argv[])
         cerr << "Shutting Down\n";
         return 1;
     }
-    
+
     //compile shaders
     shader = CreateShaderProg((char*)"src/pixlight.vert",(char*)"src/pixlight.frag");
     filter = CreateShaderProg(NULL, (char*)"src/gaussian.frag");
     blend  = CreateShaderProg(NULL, (char*)"src/blender.frag");
-    
+
     //create and configure textures for filters
     glGenTextures(1,&img);
     glBindTexture(GL_TEXTURE_2D,img);
