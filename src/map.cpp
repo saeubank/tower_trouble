@@ -104,7 +104,7 @@ std::vector<Position> AStar(Position start, Position end) {
 	        	double priority = new_cost + getHValue(next, end);
 	        	frontier.put(next, priority);
 	        	came_from[next] = current;
-	      }
+	      	}
 	    }
 	}
 	return path;
