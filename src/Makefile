@@ -17,6 +17,7 @@ endif
 CLEAN=rm -rf run *.o *.a *.dSYM
 endif
 
+CFLG=-g -Wall -Wno-deprecated-declarations $(shell sdl2-config --cflags)
 all:run
 
 #  Compile
@@ -24,7 +25,7 @@ all:run
 #	gcc -std=c99 -c $(CFLG) $<
 #.cpp.o:
 #	g++ -c $(CFLG) $<
-game.o:game.cpp structures.h objects.h pixlight.vert pixlight.frag gaussian.frag blender.frag
+game.o:game.cpp map.h enemy.h tower.h objects.h pixlight.vert pixlight.frag gaussian.frag blender.frag
 	g++ -std=c++11 -c $(CFLG) $<
 
 structures.o:structures.cpp structures.h objects.h
@@ -43,9 +44,13 @@ objects.o: objects.cpp objects.h
 	g++ -c $(CFLG) $<
 #	gcc -std=c99 -c $(CFLG) $<
 
+text.o: text.cpp text.h
+	g++ -c $(CFLG) $<
+
 #  link
-run:game.o map.o enemy.o tower.o objects.o
-	g++ -g -O3 -o run $^ $(LIBS)
+run:game.o map.o enemy.o tower.o objects.o text.o
+	#g++ -g -O3 -o run $^ $(LIBS) -lSDL2_ttf
+	g++ -g -o run $^ $(LIBS) -lSDL2_ttf
 
 #  Clean
 clean:

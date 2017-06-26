@@ -25,6 +25,7 @@
 #include "enemy.h"
 #include "tower.h"
 #include "objects.h"
+#include "text.h"
 
 using namespace std;
 
@@ -132,6 +133,13 @@ bool init()
     if (SDL_GL_SetSwapInterval(0) < 0)
     {
         cerr << "SDL could not set Vsync: " << SDL_GetError() << endl;
+        success = false;
+    }
+
+    //TTF_Font handling
+    if (TTF_Init() < 0)
+    {
+        cerr << "TTF font library could not be initialized: " << TTF_GetError() << endl;
         success = false;
     }
 
@@ -344,7 +352,24 @@ void display()
     glDisable(GL_BLEND);
     glDisable(GL_TEXTURE_2D);
 
+    glUseProgram(0);
+    //RenderText("This is test text.", (SDL_Color){255,0,255}, w/2, h/2, 200, window);
+    RenderText("This is test text.", (SDL_Color){255,0,255}, 0, 0, 400, window);
+
     //swap the buffers
+    glFlush();
+    SDL_GL_SwapWindow(window);
+}
+
+void display_test()
+{
+    glColor3f(0.2,0.2,0.2);
+    glBegin(GL_TRIANGLES);
+    glVertex2f(0.0,0.0);
+    glVertex2f(1.0,0.0);
+    glVertex2f(1.0,1.0);
+    glEnd();
+    RenderText("This is a test", (SDL_Color){255,0,255, 255}, w/2, h/2, 200, window);
     glFlush();
     SDL_GL_SwapWindow(window);
 }
