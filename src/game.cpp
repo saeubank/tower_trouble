@@ -1,7 +1,3 @@
-// Final project - game.cpp
-// Generates and plays a tower defense game
-// Jordan Dick
-// jordan.dick@colorado.edu
 
 #ifndef STDIncludes
 #define STDIncludes
