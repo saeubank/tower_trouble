@@ -56,9 +56,9 @@ class Map
     int wavetime = 600;
     int currentwavetime = 0;
     int spawncount = -1;
+    int width, height;
     int lives;
 
-    int width, height;
     std::vector<std::vector<Tile>> map;
 
     void makeMap();
