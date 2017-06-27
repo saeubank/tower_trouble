@@ -354,22 +354,12 @@ void display()
 
     glUseProgram(0);
     //RenderText("This is test text.", (SDL_Color){255,0,255}, w/2, h/2, 200, window);
-    RenderText("This is test text.", (SDL_Color){255,0,255}, 0, 0, 400, window);
+    string lives = "Lives: " + to_string(20);
+    string points = "Points: " + to_string(1472583690);
+    RenderText(lives, (SDL_Color){255,255,255}, 20, h-h/20, h/20, window);
+    RenderText(points, (SDL_Color){255,255,255}, w-300, h-h/20, h/20, window);
 
     //swap the buffers
-    glFlush();
-    SDL_GL_SwapWindow(window);
-}
-
-void display_test()
-{
-    glColor3f(0.2,0.2,0.2);
-    glBegin(GL_TRIANGLES);
-    glVertex2f(0.0,0.0);
-    glVertex2f(1.0,0.0);
-    glVertex2f(1.0,1.0);
-    glEnd();
-    RenderText("This is a test", (SDL_Color){255,0,255, 255}, w/2, h/2, 200, window);
     glFlush();
     SDL_GL_SwapWindow(window);
 }
@@ -487,7 +477,7 @@ void physics()
     }
 }
 
-// this function stolen from class examples
+// this function stolen from 4229 class examples
 char* ReadText(char* file)
 {
     int n;
@@ -506,7 +496,7 @@ char* ReadText(char* file)
     return buffer;
 }
 
-// this function stolen from class examples
+// this function stolen from 4229 class examples
 int CreateShader(GLenum type, char* file)
 {
     // Create the shader
@@ -522,7 +512,7 @@ int CreateShader(GLenum type, char* file)
     return shader;
 }
 
-// this function stolen (mostly) from class examples
+// this function stolen (mostly) from 4229 class examples
 int CreateShaderProg(char* VertFile, char* FragFile)
 {
     // Create program
