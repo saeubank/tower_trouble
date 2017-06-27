@@ -24,10 +24,7 @@ all:run
 #	gcc -std=c99 -c $(CFLG) $<
 #.cpp.o:
 #	g++ -c $(CFLG) $<
-game.o:game.cpp structures.h objects.h pixlight.vert pixlight.frag gaussian.frag blender.frag
-	g++ -std=c++11 -c $(CFLG) $<
-
-structures.o:structures.cpp structures.h objects.h
+game.o:game.cpp map.h tower.h enemy.h objects.h pixlight.vert pixlight.frag gaussian.frag blender.frag
 	g++ -std=c++11 -c $(CFLG) $<
 
 map.o:map.cpp map.h

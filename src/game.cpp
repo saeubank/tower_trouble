@@ -86,7 +86,7 @@ int pause = 0;
 int frames = 0;
 
 //Game Objects
-Map F;
+Map F(10, 10, 20);
 Enemy* enemies[64] = {NULL};
 Tower* towers[64] = {NULL};
 Bullet* bullets[128] = {NULL};
@@ -609,8 +609,10 @@ void handleEvents()
                             break;
                         case SDL_SCANCODE_RETURN:
                             //Activate the Tower and Exit Placement
-                            Position cursorPos(cursorx, cursory);
-                            if (F.isEmpty(cursorPos))
+			    //Position cursorpos(cursorx, cursory);
+			    //cursorpos.x = cursorx;
+                            //cursorpos.y = cursory;
+                            if (F.isEmpty(Position((int)cursorx, (int)cursory)))//cursorpos))
                             {
                                 (*placement_tower)->wireframe = false;
                                 placement_tower = NULL;

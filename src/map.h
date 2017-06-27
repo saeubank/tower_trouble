@@ -1,5 +1,6 @@
 #include "objects.h"
 #include <vector>
+#include <queue>
 
 #ifndef map_H
 #define map_H
@@ -24,8 +25,8 @@ struct Tile {
 // from http://www.redblobgames.com/pathfinding/a-star/implementation.html
 template<typename T, typename priority_t>
 struct PriorityQueue {
-  typedef pair<priority_t, T> PQElement;
-  priority_queue<PQElement, vector<PQElement>,
+  typedef std::pair<priority_t, T> PQElement;
+  std::priority_queue<PQElement, std::vector<PQElement>,
                  std::greater<PQElement>> elements;
 
   inline bool empty() const { return elements.empty(); }
