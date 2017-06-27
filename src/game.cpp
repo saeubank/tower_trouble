@@ -61,7 +61,7 @@ float Ambient[4];
 float Diffuse[4];
 float Specular[4];
 float shininess[1];
-float Position[4];
+float LightPos[4];
 float ltheta = 0.0;
 
 //Textures
@@ -194,7 +194,7 @@ void display()
     glLightfv(GL_LIGHT0, GL_AMBIENT, Ambient);
     glLightfv(GL_LIGHT0, GL_DIFFUSE, Diffuse);
     glLightfv(GL_LIGHT0, GL_SPECULAR, Specular);
-    glLightfv(GL_LIGHT0, GL_POSITION, Position);
+    glLightfv(GL_LIGHT0, GL_POSITION, LightPos);
 
 
     ///////////////////////////
@@ -237,7 +237,7 @@ void display()
     //glDisable(GL_TEXTURE_2D);
     glDisable(GL_LIGHTING);
     glColor3f(1.0,1.0,1.0);
-    ball(Position[0], Position[1], Position[2], 0.125);
+    ball(LightPos[0], LightPos[1], LightPos[2], 0.125);
 
     //Set Blur Filter
     glUseProgram(filter);
@@ -360,8 +360,8 @@ void physics()
         //move the light
         ltheta += M_PI/180;
         ltheta = fmod(ltheta, 2*M_PI);
-        Position[0] = 4.5*sin(ltheta);
-        Position[2] = 4.5*cos(ltheta);
+        LightPos[0] = 4.5*sin(ltheta);
+        LightPos[2] = 4.5*cos(ltheta);
 
         //Manage the Spawning of Waves
         int newenemy = F.spawnEnemy();
@@ -702,7 +702,7 @@ int main(int argc, char *argv[])
 
     reshape(w,h);
 
-    Position[0] = 0.0; Position[1] = 8.0; Position[2] = 4.5; Position[3] = 1.0;
+    LightPos[0] = 0.0; LightPos[1] = 8.0; LightPos[2] = 4.5; LightPos[3] = 1.0;
 
     int startuptime = SDL_GetTicks();
 

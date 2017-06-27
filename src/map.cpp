@@ -1,47 +1,48 @@
-#include "Map.hpp"
+#include "map.h"
 #include <vector>
 #include <cmath>
 #include <queue>
 #include <tuple>
+#include <unordered_map>
 
 Map::Map(int width, int height, int lives): width(width), height(height), lives(lives) {
-	makeMap();
+    makeMap();
 }
 
 int Map::getWidth() const {
-	return width;
+    return width;
 }
 
 int Map::getHeight() const {
-	return height;
+    return height;
 }
 
-int getLives() const {
-	return lives;
+int Map::getLives() const {
+    return lives;
 }
 
-void setLives(int x) {
-	lives = x;
+void Map::setLives(int x) {
+    lives = x;
 }
 
-void decrementLives() {
-	lives = getLives() - 1;
+void Map::decrementLives() {
+    lives = getLives() - 1;
 }
 
 Tile & Map::operator[](Position pos) {
-	return map[pos.x][pos.y];
+    return map[pos.x][pos.y];
 }
 
-const Tile & Map::operator[](Position pos) const {
-	return map[pos.x][pos.y];
-}
+//const Tile & Map::operator[](Position pos) const {
+//    return map[pos.x][pos.y];
+//}
 
 Tile Map::getTile(Position pos) const {
-	return map[pos.x][pos.y];
+    return map[pos.x][pos.y];
 }
 
 void Map::setTile(Tile tile, Position pos) {
-	map[pos.x][pos.y] = tile;
+    map[pos.x][pos.y] = tile;
 }
 
 void Map::renderTile(float x, float y, float z) {
@@ -78,8 +79,8 @@ void Map::render() {
     glPushMatrix();
     glTranslated(-8,0,-8);
 
-    for (int i = 0; i < map.getWidth(); ++i) {
-        for (int j = 0; j < map.getHeight(); ++j) {
+    for (int i = 0; i < getWidth(); ++i) {
+        for (int j = 0; j < getHeight(); ++j) {
             renderTile(i * 2, 0, j * 2);
         }
     }
@@ -144,92 +145,92 @@ void Map::spawnWave()
 }
 
 bool Map::isEmpty(Position pos) {
-	if (pos.x >= width || pos.x < 0 || pos.y >= height || y < 0) {
-		return false;
-	}
-	return map[pos].tileType == TileType::GROUND;
+    if (pos.x >= width || pos.x < 0 || pos.y >= height || pos.y < 0) {
+        return false;
+    }
+    return map[pos.x][pos.y].tileType == TileType::GROUND;
 }
 
 bool Map::setTower(TileType tower, Position pos) {
-	if (isEmpty(pos)) {
-		map[pos].tileType = TileType::tower;
-		return true;
-	}
-	return false;
+    if (isEmpty(pos)) {
+        map[pos.x][pos.y].tileType = tower;
+        return true;
+    }
+    return false;
 }
 
 std::vector<Position> Map::getNeighbors(Position pos) {
-	std::vector<Position> neighbors;
-	Position up = Position(pos.x - 1, pos.y);
-	Position down = Position(pos.x + 1, pos.y);
-	Position left = Position(pos.x, pos.y - 1);
-	Position right = Position(pos.x, pos.y + 1);
-	if (isEmpty(up)) {
-		neighbors.push_back(up);
-	}
-	if (isEmpty(down)) {
-		neighbors.push_back(down);
-	}
-	if (isEmpty(left)) {
-		neighbors.push_back(left);
-	}
-	if (isEmpty(right)) {
-		neighbors.push_back(right);
-	}
-	return neighbors;
+    std::vector<Position> neighbors;
+    Position up = Position(pos.x - 1, pos.y);
+    Position down = Position(pos.x + 1, pos.y);
+    Position left = Position(pos.x, pos.y - 1);
+    Position right = Position(pos.x, pos.y + 1);
+    if (isEmpty(up)) {
+        neighbors.push_back(up);
+    }
+    if (isEmpty(down)) {
+        neighbors.push_back(down);
+    }
+    if (isEmpty(left)) {
+        neighbors.push_back(left);
+    }
+    if (isEmpty(right)) {
+        neighbors.push_back(right);
+    }
+    return neighbors;
 }
 
 float Map::getHValue(Position cur, Position end) {
-	return sqrt(pow((cur.x - end.x), 2) + pow((cur.y - end.y), 2));
+    return sqrt(pow((cur.x - end.x), 2) + pow((cur.y - end.y), 2));
 }
 
 
 std::vector<Position> Map::AStar(Position start, Position end) {
-	std::vector<Position> closed;
-	int cost = 0;
-	PriorityQueue<Position, float> open;
-	open.put(start, getHValue(start, end));
-	std::unordered_map<Position, Position> came_from;
-	std::unordered_map<Position, float> cost_so_far;
-	came_from[start] = start;
-	cost_so_far[start] = 0;
-	std::vector<Position> path;
+    std::vector<Position> closed;
+    int cost = 0;
+    PriorityQueue<Position, float> open;
+    open.put(start, getHValue(start, end));
+    std::unordered_map<Position, Position> came_from;
+    std::unordered_map<Position, float> cost_so_far;
+    came_from[start] = start;
+    cost_so_far[start] = 0;
+    std::vector<Position> path;
 
-	while (!open.empty()) {
-		auto cur = open.get();
-		if (cur == end) {
-			path.push_back(cur);
-			while (current != start) {
-				cur = came_from[cur];
-				path.push_back(cur);
-			}
-			path.push_back(start)
-			std::reverse(path.begin(), path.end());
-			return path;
-		}
-		for (auto& next : getNeighbors(cur)) {
-	      	float new_cost = cost_so_far[cur] + graph.cost(cur, next);
-	      	if (!cost_so_far.count(next) || new_cost < cost_so_far[next]) {
-	        	cost_so_far[next] = new_cost;
-	        	float priority = new_cost + getHValue(next, end);
-	        	frontier.put(next, priority);
-	        	came_from[next] = current;
-	      	}
-	    }
-	}
-	return path;
+    while (!open.empty()) {
+        auto cur = open.get();
+        if (cur == end) {
+            path.push_back(cur);
+            while (cur != start) {
+                cur = came_from[cur];
+                path.push_back(cur);
+            }
+            path.push_back(start);
+            std::reverse(path.begin(), path.end());
+            return path;
+        }
+        for (auto& next : getNeighbors(cur)) {
+              float new_cost = cost_so_far[cur] + graph.cost(cur, next);
+              if (!cost_so_far.count(next) || new_cost < cost_so_far[next]) {
+                cost_so_far[next] = new_cost;
+                float priority = new_cost + getHValue(next, end);
+                frontier.put(next, priority);
+                came_from[next] = current;
+              }
+        }
+    }
+    return path;
 }
 
 void Map::makeMap() {
-	for(int i = 0; i < width; i++) {
-		for(int j = 0; j < height; j++) {
-			map[i][j].tileType = TileType::GROUND;
-			// if(i == 0 || i == width - 1 || j == 0 || j == height - 1) {
-			// 	map[i][j].tileType = TileType::NOTHING;
-			// }
-			// else {
-			// 	map[i][j].tileType = TileType::GROUND;
-			// }
-		}
-	}
+    for(int i = 0; i < width; i++) {
+        for(int j = 0; j < height; j++) {
+            map[i][j].tileType = TileType::GROUND;
+            // if(i == 0 || i == width - 1 || j == 0 || j == height - 1) {
+            //     map[i][j].tileType = TileType::NOTHING;
+            // }
+            // else {
+            //     map[i][j].tileType = TileType::GROUND;
+            // }
+        }
+    }
 }
