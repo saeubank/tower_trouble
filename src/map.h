@@ -6,40 +6,40 @@
 #define map_H
 
 struct Position {
-	int x, y;
-	Position(int x, int y): x(x), y(y) {}
+    int x, y;
+    Position(int x, int y): x(x), y(y) {}
 };
 
 enum class TileType {
-	NOTHING,
-	GROUND,
-	TOWER1,
-	TOWER2,
+    NOTHING,
+    GROUND,
+    TOWER1,
+    TOWER2,
 };
 
 struct Tile {
-	TileType tileType;
-	Tile(TileType tileType): tileType(tileType) {}
+    TileType tileType;
+    Tile(TileType tileType): tileType(tileType) {}
 };
 
 // from http://www.redblobgames.com/pathfinding/a-star/implementation.html
 template<typename T, typename priority_t>
 struct PriorityQueue {
-  typedef std::pair<priority_t, T> PQElement;
-  std::priority_queue<PQElement, std::vector<PQElement>,
-                 std::greater<PQElement>> elements;
+    typedef std::pair<priority_t, T> PQElement;
+    std::priority_queue<PQElement, std::vector<PQElement>,
+                        std::greater<PQElement>> elements;
 
-  inline bool empty() const { return elements.empty(); }
+    inline bool empty() const { return elements.empty(); }
 
-  inline void put(T item, priority_t priority) {
-    elements.emplace(priority, item);
-  }
+    inline void put(T item, priority_t priority) {
+        elements.emplace(priority, item);
+    }
 
-  inline T get() {
-    T best_item = elements.top().second;
-    elements.pop();
-    return best_item;
-  }
+    inline T get() {
+        T best_item = elements.top().second;
+        elements.pop();
+        return best_item;
+    }
 };
 
 class Map
@@ -56,12 +56,12 @@ class Map
     int wavetime = 600;
     int currentwavetime = 0;
     int spawncount = -1;
-	int lives;
+    int lives;
 
     int width, height;
-	std::vector<std::vector<Tile>> map;
+    std::vector<std::vector<Tile>> map;
 
-	void makeMap();
+    void makeMap();
 public:
     int currentwave = -1;
     void renderTile(float x, float y, float z);
@@ -73,18 +73,18 @@ public:
     Map(int width, int height, int lives);
     int getWidth() const;
     int getHeight() const;
-	int getLives() const;
-	void setLives(int x);
-	void decrementLives();
+    int getLives() const;
+    void setLives(int x);
+    void decrementLives();
     Tile & operator[](Position pos);
     const Tile & operator[](Position pos) const;
     Tile getTile(Position pos) const;
     void setTile(Tile tile, Position pos);
     bool isEmpty(Position pos);
     bool setTower(TileType tower, Position pos);
-	std::vector<Position> getNeighbors(Position pos);
-	float getHValue(Position cur, Position end);
-	std::vector<Position> AStar(Position start, Position end);
+    std::vector<Position> getNeighbors(Position pos);
+    float getHValue(Position cur, Position end);
+    std::vector<Position> AStar(Position start, Position end);
 };
 
 #endif
