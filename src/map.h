@@ -8,6 +8,12 @@
 struct Position {
     int x, y;
     Position(int x, int y): x(x), y(y) {}
+    bool operator==(const Position& left, const Position& right) {
+        return left.x == right.x && left.y == right.y;
+    }
+    bool operator!=(const Position& left, const Position& right) {
+        return !(left == right);
+    }
 };
 
 enum class TileType {
