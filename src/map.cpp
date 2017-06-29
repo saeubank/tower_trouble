@@ -30,19 +30,19 @@ void Map::decrementLives() {
 }
 
 Tile & Map::operator[](Position pos) {
-    return map[pos.x][pos.y];
+    return map[pos.first][pos.second];
 }
 
 //const Tile & Map::operator[](Position pos) const {
-//    return map[pos.x][pos.y];
+//    return map[pos.first][pos.second];
 //}
 
 Tile Map::getTile(Position pos) const {
-    return map[pos.x][pos.y];
+    return map[pos.first][pos.second];
 }
 
 void Map::setTile(Tile tile, Position pos) {
-    map[pos.x][pos.y] = tile;
+    map[pos.first][pos.second] = tile;
 }
 
 void Map::renderTile(float x, float y, float z) {
@@ -145,15 +145,15 @@ void Map::spawnWave()
 }
 
 bool Map::isEmpty(Position pos) {
-    if (pos.x >= width || pos.x < 0 || pos.y >= height || pos.y < 0) {
+    if (pos.first >= width || pos.first < 0 || pos.second >= height || pos.second < 0) {
         return false;
     }
-    return map[pos.x][pos.y].tileType == TileType::GROUND;
+    return map[pos.first][pos.second].tileType == TileType::GROUND;
 }
 
 bool Map::setTower(TileType tower, Position pos) {
     if (isEmpty(pos)) {
-        map[pos.x][pos.y].tileType = tower;
+        map[pos.first][pos.second].tileType = tower;
         return true;
     }
     return false;
@@ -161,10 +161,10 @@ bool Map::setTower(TileType tower, Position pos) {
 
 std::vector<Position> Map::getNeighbors(Position pos) {
     std::vector<Position> neighbors;
-    Position up = Position(pos.x - 1, pos.y);
-    Position down = Position(pos.x + 1, pos.y);
-    Position left = Position(pos.x, pos.y - 1);
-    Position right = Position(pos.x, pos.y + 1);
+    Position up = Position(pos.first - 1, pos.second);
+    Position down = Position(pos.first + 1, pos.second);
+    Position left = Position(pos.first, pos.second - 1);
+    Position right = Position(pos.first, pos.second + 1);
     if (isEmpty(up)) {
         neighbors.push_back(up);
     }
@@ -181,7 +181,7 @@ std::vector<Position> Map::getNeighbors(Position pos) {
 }
 
 float Map::getHValue(Position cur, Position end) {
-    return sqrt(pow((cur.x - end.x), 2) + pow((cur.y - end.y), 2));
+    return sqrt(pow((cur.first - end.first), 2) + pow((cur.second - end.second), 2));
 }
 
 namespace std {
@@ -198,8 +198,8 @@ namespace std {
       // second and third and combine them using XOR
       // and bit shifting:
 
-      return ((hash<int>()(k.x)
-               ^ (hash<int>()(k.y) << 1)) >> 1);
+      return ((hash<int>()(k.first)
+               ^ (hash<int>()(k.second) << 1)) >> 1);
     }
   };
 
@@ -207,7 +207,6 @@ namespace std {
 
 std::vector<Position> Map::AStar(Position start, Position end) {
     std::vector<Position> closed;
-    int cost = 0;
     PriorityQueue<Position, float> open;
     open.put(start, getHValue(start, end));
     std::unordered_map<Position, Position> came_from;

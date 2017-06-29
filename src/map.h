@@ -5,16 +5,36 @@
 #ifndef map_H
 #define map_H
 
-struct Position {
-    int x, y;
-    Position(int x, int y): x(x), y(y) {}
-    bool operator==(const Position& right) const {
-        return this->x == right.x && this->y == right.y;
-    }
-    bool operator!=(const Position& right) const {
-        return !(*this == right);
-    }
-};
+//struct Position {
+//    int x, y;
+//    Position(int x, int y): x(x), y(y) {}
+//    bool operator==(const Position& that) {
+//        return this->x == that.x && this->y == that.y;
+//    }
+//    bool operator!=(const Position& that) {
+//        return !(*this == that);
+//    }
+//    bool operator<(const Position& that) {
+//        if (this->x == that.x) {
+//            return this->y < that.y;
+//        }
+//        return this->x < that.x;
+//    }
+//    bool operator>(const Position& that) {
+//        if (this->x == that.x) {
+//            return this->y > that.y;
+//        }
+//        return this->x > that.x;
+//    }
+//    bool operator<=(const Position& that) {
+//        return !(*this > that);
+//    }
+//    bool operator>=(const Position& that) {
+//        return !(*this < that);
+//    }
+//};
+
+typedef std::pair<int, int> Position;
 
 enum class TileType {
     NOTHING,
