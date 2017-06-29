@@ -8,10 +8,10 @@
 struct Position {
     int x, y;
     Position(int x, int y): x(x), y(y) {}
-    inline bool operator==(const Position& right) {
+    bool operator==(const Position& right) const {
         return this->x == right.x && this->y == right.y;
     }
-    inline bool operator!=(const Position& right) {
+    bool operator!=(const Position& right) const {
         return !(*this == right);
     }
 };

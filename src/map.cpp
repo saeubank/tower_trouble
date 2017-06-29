@@ -184,6 +184,26 @@ float Map::getHValue(Position cur, Position end) {
     return sqrt(pow((cur.x - end.x), 2) + pow((cur.y - end.y), 2));
 }
 
+namespace std {
+
+  template <>
+  struct hash<Position>
+  {
+    std::size_t operator()(const Position& k) const
+    {
+      using std::size_t;
+      using std::hash;
+
+      // Compute individual hash values for first,
+      // second and third and combine them using XOR
+      // and bit shifting:
+
+      return ((hash<int>()(k.x)
+               ^ (hash<int>()(k.y) << 1)) >> 1);
+    }
+  };
+
+}
 
 std::vector<Position> Map::AStar(Position start, Position end) {
     std::vector<Position> closed;
