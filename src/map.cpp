@@ -209,12 +209,12 @@ std::vector<Position> Map::AStar(Position start, Position end) {
             return path;
         }
         for (auto& next : getNeighbors(cur)) {
-              float new_cost = cost_so_far[cur] + graph.cost(cur, next);
+              float new_cost = cost_so_far[cur] + 1; 
               if (!cost_so_far.count(next) || new_cost < cost_so_far[next]) {
                 cost_so_far[next] = new_cost;
                 float priority = new_cost + getHValue(next, end);
-                frontier.put(next, priority);
-                came_from[next] = current;
+                open.put(next, priority);
+                came_from[next] = cur;
               }
         }
     }
