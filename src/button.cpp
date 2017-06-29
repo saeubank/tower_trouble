@@ -1,17 +1,19 @@
+
+
 #include "button.h"
 //Button constants
 const int BUTTON_WIDTH = 300;
 const int BUTTON_HEIGHT = 200;
 const int TOTAL_BUTTONS = 4;
 
-enum LButtonSprite
-{
-    BUTTON_SPRITE_MOUSE_OUT = 0,
-    BUTTON_SPRITE_MOUSE_OVER_MOTION = 1,
-    BUTTON_SPRITE_MOUSE_DOWN = 2,
-    BUTTON_SPRITE_MOUSE_UP = 3,
-    BUTTON_SPRITE_TOTAL = 4
-};
+// enum LButtonSprite
+// {
+//     BUTTON_SPRITE_MOUSE_OUT = 0,
+//     BUTTON_SPRITE_MOUSE_OVER_MOTION = 1,
+//     BUTTON_SPRITE_MOUSE_DOWN = 2,
+//     BUTTON_SPRITE_MOUSE_UP = 3,
+//     BUTTON_SPRITE_TOTAL = 4
+// };
 
 LButton::LButton() {
     mPosition.x = 0;
@@ -25,7 +27,7 @@ void LButton::setPosition(int x, int y) {
     mPosition.y = y;
 }
 
-void LButton::handleEvent(SDL_Event* event) {
+bool LButton::handleEvent(SDL_Event* event) {
   //If mouse event happened
       if( event->type == SDL_MOUSEMOTION || event->type == SDL_MOUSEBUTTONDOWN || event->type == SDL_MOUSEBUTTONUP )
       {
@@ -34,7 +36,7 @@ void LButton::handleEvent(SDL_Event* event) {
           SDL_GetMouseState( &x, &y );
           //Check if mouse is in button
           bool inside = true;
-
+          bool click = false;
           //Mouse is left of the button
           if( x < mPosition.x )
           {
@@ -70,6 +72,7 @@ void LButton::handleEvent(SDL_Event* event) {
 
                 case SDL_MOUSEBUTTONDOWN:
                 mCurrentSprite = BUTTON_SPRITE_MOUSE_DOWN;
+                click = true;
                 break;
 
                 case SDL_MOUSEBUTTONUP:
@@ -77,10 +80,11 @@ void LButton::handleEvent(SDL_Event* event) {
                 break;
             }
           }
+          return click;
       }
 }
 
-void LButton::render(){
+void LButton::render(LTexture sprite_sheet, SDL_Rect sprites[]){
   //render the current sprite
-  gButtonSpriteSheetTexture.render( mPosition.x, mPosition.y, &gSpriteClips[ mCurrentSprite ] );
+  sprite_sheet.render( mPosition.x, mPosition.y, &sprites[ mCurrentSprite ] );
 }

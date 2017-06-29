@@ -14,8 +14,8 @@
 #include <GL/glu.h>
 #endif
 #endif
-
 #include <iostream>
+#include <SDL2/SDL_image.h>
 
 //#include "CSCIx229.h"
 #include <SDL.h>
@@ -25,6 +25,8 @@
 #include "enemy.h"
 #include "tower.h"
 #include "objects.h"
+#include "button.h"
+#include "ltexture.h"
 
 using namespace std;
 
@@ -65,7 +67,7 @@ float Ambient[4];
 float Diffuse[4];
 float Specular[4];
 float shininess[1];
-float Position[4]; 
+float Position[4];
 float ltheta = 0.0;
 
 //Textures
@@ -81,7 +83,7 @@ int id;
 //SDL Window/OpenGL Context
 SDL_Window* window = NULL;
 SDL_GLContext context;
-
+SDL_Renderer* gRenderer = NULL;
 //Timing
 int r = 0;
 int dr = 0;
@@ -102,8 +104,21 @@ Bullet* bullets[128] = {NULL};
 void reshape(int width, int height);
 void keyboard(const Uint8* state);
 
-//////// SDL Init Function ////////
+//Button constants
+const int BUTTON_WIDTH = 300;
+const int BUTTON_HEIGHT = 200;
+const int TOTAL_BUTTONS = 1;
 
+
+//Mouse Button sprites
+SDL_Rect gSpriteClips[ BUTTON_SPRITE_TOTAL ];
+LTexture gButtonSpriteSheetTexture;
+//////// SDL Init Function ////////
+bool loadMedia(LButton button);
+void game();
+void handleEvents();
+void physics();
+void display();
 bool init()
 {
     bool success = true;
@@ -127,7 +142,7 @@ bool init()
         cerr << "SDL failed to create OpenGL context: " << SDL_GetError() << endl;
         success = false;
     }
-    
+
     //Vsync
     if (SDL_GL_SetSwapInterval(0) < 0)
     {
@@ -135,10 +150,61 @@ bool init()
         success = false;
     }
 
+    //Initialize PNG loading
+    int imgFlags = IMG_INIT_PNG;
+    if( !(IMG_Init( imgFlags ) & imgFlags ) )
+    {
+      printf( "SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError() );
+      success = false;
+    }
+
     return success;
 }
 
 ///////////////////////////////////
+
+void menu() {
+	bool quit = false;
+	LButton start;
+	start.setPosition(h - (h/2), w - (w/2));
+	SDL_Event e;
+	if (!loadMedia(start)) printf("Failed to load media!\n");
+	else{
+		while(!quit) {
+			while( SDL_PollEvent( &e ) != 0 ){
+				if (e.type == SDL_QUIT) {
+					quit = true;
+				}
+				if (start.handleEvent(&e)){
+					start.render(gButtonSpriteSheetTexture, gSpriteClips);
+					while (!quit){
+						game();
+					}
+
+				}
+				start.render(gButtonSpriteSheetTexture, gSpriteClips);
+			}
+
+		}
+	}
+
+}
+
+void game() {
+	handleEvents();
+
+	//// PHYSICS TIMING ////
+	r = SDL_GetTicks();
+	dr += r - oldr;
+	while (dr >= 16)
+	{
+			physics();
+			dr -= 16;
+	}
+	oldr = r;
+	display();
+	frames += 1;
+}
 
 void GameOver()
 {
@@ -349,6 +415,34 @@ void display()
     SDL_GL_SwapWindow(window);
 }
 
+bool loadMedia(LButton button)
+{
+	//Loading success flag
+	bool success = true;
+
+	//Load sprites
+	if( !gButtonSpriteSheetTexture.loadFromFile( "../assets/button.png", gRenderer ) )
+	{
+		printf( "Failed to load button sprite texture!\n" );
+		success = false;
+	}
+	else
+	{
+		//Set sprites
+		for( int i = 0; i < BUTTON_SPRITE_TOTAL; ++i )
+		{
+			gSpriteClips[ i ].x = 0;
+			gSpriteClips[ i ].y = i * 200;
+			gSpriteClips[ i ].w = BUTTON_WIDTH;
+			gSpriteClips[ i ].h = BUTTON_HEIGHT;
+		}
+		button.setPosition(w -(w/2), h - (h/2));
+	}
+
+	return success;
+}
+
+
 void physics()
 {
     const Uint8* state = SDL_GetKeyboardState(NULL);
@@ -383,7 +477,7 @@ void physics()
             if (enemies[i] != NULL)
             {
                 enemies[i]->animate();
-            
+
                 if (enemies[i]->x == 8.0 && enemies[i]->y == 6.0)
                 {
                     F.lives -= 1;
@@ -527,7 +621,7 @@ void reshape(int width, int height)
     //switch to projection matrix
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    
+
     //adjust projection
     gluPerspective(60, w2h, 0.5, 20*4);
 
@@ -541,7 +635,7 @@ void keyboard(const Uint8* state)
 {
     if (state[SDL_SCANCODE_ESCAPE])
         quit = true;
-    
+
     if (state[SDL_SCANCODE_LEFT])
         dth = 0.5;
     else if (state[SDL_SCANCODE_RIGHT])
@@ -680,12 +774,12 @@ int main(int argc, char *argv[])
         cerr << "Shutting Down\n";
         return 1;
     }
-    
+
     //compile shaders
     shader = CreateShaderProg((char*)"src/pixlight.vert",(char*)"src/pixlight.frag");
     filter = CreateShaderProg(NULL, (char*)"src/gaussian.frag");
     blend  = CreateShaderProg(NULL, (char*)"src/blender.frag");
-    
+
     //create and configure textures for filters
     glGenTextures(1,&img);
     glBindTexture(GL_TEXTURE_2D,img);
@@ -711,19 +805,7 @@ int main(int argc, char *argv[])
     ////////Main Loop////////
     while (!quit)
     {
-        handleEvents();
-
-        //// PHYSICS TIMING ////
-        r = SDL_GetTicks();
-        dr += r - oldr;
-        while (dr >= 16)
-        {
-            physics();
-            dr -= 16;
-        }
-        oldr = r;
-        display();
-        frames += 1;
+			menu();
     }
 
     cout << "Shutting Down\n";
