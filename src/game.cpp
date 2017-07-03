@@ -16,7 +16,18 @@
 #endif
 
 #include <iostream>
+// For database connection:
+#include <mysql_connection.h>
+#include <cppconn/driver.h>
+#include <cppconn/exception.h>
+#include <cppconn/resultset.h>
+#include <cppconn/statement.h>
+#include <cppconn/prepared_statement.h>
 
+#define HOST "localhost"
+#define USER "root"
+#define PASS ""
+#define DB "scores"
 //#include "CSCIx229.h"
 #include <SDL.h>
 #include <SDL_opengl.h>
@@ -66,7 +77,7 @@ float Ambient[4];
 float Diffuse[4];
 float Specular[4];
 float shininess[1];
-float Position[4]; 
+float Position[4];
 float ltheta = 0.0;
 
 //Textures
@@ -87,7 +98,7 @@ SDL_GLContext context;
 int r = 0;
 int dr = 0;
 int oldr = 0;
-int pause = 0;
+int Pause = 0;
 int frames = 0;
 
 //Game Objects
@@ -128,7 +139,7 @@ bool init()
         cerr << "SDL failed to create OpenGL context: " << SDL_GetError() << endl;
         success = false;
     }
-    
+
     //Vsync
     if (SDL_GL_SetSwapInterval(0) < 0)
     {
@@ -150,6 +161,35 @@ bool init()
 
 void GameOver()
 {
+    string url = HOST;
+    const string user = USER;
+    const string pass = PASS;
+    const string database = DB;
+    try {
+        sql::Driver* driver = get_driver_instance();
+        std::auto_ptr<sql::Connection> con(driver->connect(url, user, pass));
+        con->setSchema(database);
+        std::auto_ptr<sql::Statement> stmt(con->createStatement());
+
+        // CALL the procedure to add scores
+        stmt->execute("CALL add_score('test'," + "1233445" + ")");
+    } catch (sql::SQLException &e) {
+        /*
+        MySQL Connector/C++ throws three different exceptions:
+
+        - sql::MethodNotImplementedException (derived from sql::SQLException)
+        - sql::InvalidArgumentException (derived from sql::SQLException)
+        - sql::SQLException (derived from std::runtime_error)
+        */
+        cout << "# ERR: SQLException in " << __FILE__;
+        cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << endl;
+        /* what() (derived from std::runtime_error) fetches error message */
+        cout << "# ERR: " << e.what();
+        cout << " (MySQL error code: " << e.getErrorCode();
+        cout << ", SQLState: " << e.getSQLState() << " )" << endl;
+        cout << "Procedure failed!";
+    }
+
     for (int i=0; i < 64; ++i)
     {
         if (enemies[i] != NULL)
@@ -374,7 +414,7 @@ void physics()
     ph += dph;
     zoom = zoom<2.0?2.0:zoom+dzoom;
 
-    if (!pause)
+    if (!Pause)
     {
         //move the light
         ltheta += M_PI/180;
@@ -398,7 +438,7 @@ void physics()
             if (enemies[i] != NULL)
             {
                 enemies[i]->animate();
-            
+
                 if (enemies[i]->x == 8.0 && enemies[i]->y == 6.0)
                 {
                     F.lives -= 1;
@@ -467,6 +507,8 @@ void physics()
                         {
                             delete *(bullets[i]->target);
                             *(bullets[i]->target) = NULL;
+                            // Get points
+                            F.points ++;
                         }
                         delete bullets[i];
                         bullets[i] = NULL;
@@ -542,7 +584,7 @@ void reshape(int width, int height)
     //switch to projection matrix
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    
+
     //adjust projection
     gluPerspective(60, w2h, 0.5, 20*4);
 
@@ -556,7 +598,7 @@ void keyboard(const Uint8* state)
 {
     if (state[SDL_SCANCODE_ESCAPE])
         quit = true;
-    
+
     if (state[SDL_SCANCODE_LEFT])
         dth = 0.5;
     else if (state[SDL_SCANCODE_RIGHT])
@@ -640,7 +682,7 @@ void handleEvents()
                     }
                 }
                 if (event.key.keysym.scancode == SDL_SCANCODE_SPACE)
-                    pause = 1 - pause;
+                    Pause = 1 - Pause;
                 else if (event.key.keysym.scancode == SDL_SCANCODE_M || event.key.keysym.scancode == SDL_SCANCODE_N)
                 {
                     if (event.key.keysym.scancode == SDL_SCANCODE_M)
@@ -695,12 +737,12 @@ int main(int argc, char *argv[])
         cerr << "Shutting Down\n";
         return 1;
     }
-    
+
     //compile shaders
     shader = CreateShaderProg((char*)"src/pixlight.vert",(char*)"src/pixlight.frag");
     filter = CreateShaderProg(NULL, (char*)"src/gaussian.frag");
     blend  = CreateShaderProg(NULL, (char*)"src/blender.frag");
-    
+
     //create and configure textures for filters
     glGenTextures(1,&img);
     glBindTexture(GL_TEXTURE_2D,img);

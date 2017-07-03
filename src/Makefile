@@ -50,7 +50,7 @@ text.o: text.cpp text.h
 #  link
 run:game.o map.o enemy.o tower.o objects.o text.o
 	#g++ -g -O3 -o run $^ $(LIBS) -lSDL2_ttf
-	g++ -g -o run $^ $(LIBS) -lSDL2_ttf
+	g++ -g -o run $^ $(LIBS) -lSDL2_ttf -I/usr/local/include -I/usr/local/include/cppconn -lmysqlcppconn
 
 #  Clean
 clean:
