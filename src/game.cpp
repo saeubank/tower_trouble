@@ -128,7 +128,7 @@ bool init()
     if (SDL_GL_SetSwapInterval(0) < 0)
     {
         cerr << "SDL could not set Vsync: " << SDL_GetError() << endl;
-        success = false;
+//        success = false;
     }
 
     return success;

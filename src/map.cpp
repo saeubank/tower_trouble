@@ -4,9 +4,10 @@
 #include <queue>
 #include <tuple>
 #include <unordered_map>
+#include <algorithm>
 
-Map::Map(int width, int height, int lives): width(width), height(height), lives(lives) {
-    makeMap();
+Map::Map(int width, int height, int lives): width(width), height(height), lives(lives), map(width,std::vector<Tile>(height, Tile(TileType::GROUND))) {
+//    makeMap();
 }
 
 int Map::getWidth() const {
@@ -33,9 +34,9 @@ Tile & Map::operator[](Position pos) {
     return map[pos.first][pos.second];
 }
 
-const Tile & Map::operator[](Position pos) const {
-   return map[pos.first][pos.second];
-}
+//const Tile & Map::operator[](Position pos) const {
+//   return map[pos.first][pos.second];
+//}
 
 Tile Map::getTile(Position pos) const {
     return map[pos.first][pos.second];
