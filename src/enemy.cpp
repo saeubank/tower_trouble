@@ -6,7 +6,7 @@ Enemy::Enemy(float X, float Y, int Health, int Type)
     health = Health;
     x = X;
     y = Y;
-    z = 0;
+    z = 2;
     theta = 0.0;
     speed = 0.06;
     if (type == 1)
