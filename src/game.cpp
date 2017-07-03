@@ -87,9 +87,9 @@ int frames = 0;
 
 //Game Objects
 Map F(10, 10, 20);
-Enemy* enemies[64] = {NULL};
-Tower* towers[64] = {NULL};
-Bullet* bullets[128] = {NULL};
+Enemy* enemies[256] = {NULL};
+Tower* towers[128] = {NULL};
+Bullet* bullets[512] = {NULL};
 
 ////////////////////
 //functions that are called ahead of when they're defined
