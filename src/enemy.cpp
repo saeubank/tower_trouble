@@ -98,6 +98,7 @@ void Enemy::render()
 
 void Enemy::animate()
 {
+    // geometry rendering
     if (type == 2)
     {
         if (s1 <= 0.7 || s1 >= 1.0)

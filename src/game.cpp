@@ -30,7 +30,7 @@ bool quit = false;
 
 //View Angles
 double th = 0;
-double ph = 40;
+double ph = 72;
 double dth = 0;
 double dph = 0;
 //Window Size
@@ -53,7 +53,7 @@ double ez = 0;
 double vx = 0;
 double vy = 0;
 double vz = 0;
-double zoom = 16;
+double zoom = 24;
 double dzoom = 0;
 
 //lighting arrays
@@ -87,9 +87,12 @@ int frames = 0;
 
 //Game Objects
 Map F(10, 10, 20);
-Enemy* enemies[256] = {NULL};
-Tower* towers[128] = {NULL};
-Bullet* bullets[512] = {NULL};
+const int nEnemies = 256;
+const int nTowers = 128;
+const int nBullets = 512;
+Enemy* enemies[nEnemies] = {NULL};
+Tower* towers[nTowers] = {NULL};
+Bullet* bullets[nBullets] = {NULL};
 
 ////////////////////
 //functions that are called ahead of when they're defined
@@ -138,7 +141,7 @@ bool init()
 
 void GameOver()
 {
-    for (int i=0; i < 64; ++i)
+    for (int i=0; i < nEnemies; ++i)
     {
         if (enemies[i] != NULL)
         {
@@ -215,17 +218,17 @@ void display()
     glMaterialfv(GL_FRONT, GL_EMISSION, emission);
     F.render();
 
-    for(int i=0; i<64; ++i)
+    for(int i=0; i<nEnemies; ++i)
     {
         if (enemies[i] != NULL)
             enemies[i]->render();
     }
-    for(int i=0; i<64; ++i)
+    for(int i=0; i<nTowers; ++i)
     {
         if (towers[i] != NULL)
             towers[i]->render();
     }
-    for(int i=0; i<128; ++i)
+    for(int i=0; i<nBullets; ++i)
     {
         if (bullets[i] != NULL)
             bullets[i]->render();
@@ -370,11 +373,11 @@ void physics()
             int i = 0;
             while (enemies[i]!=NULL)
                 ++i;
-            enemies[i] = new Enemy(-8,6, F.currentwave==0 ? 25 : 25*F.currentwave, newenemy);
+            enemies[i] = new Enemy(-10,8, F.currentwave==0 ? 25 : 25*F.currentwave, newenemy);
         }
 
         //animate enemies
-        for (int i=0; i<64; ++i)
+        for (int i=0; i<nEnemies; ++i)
         {
             if (enemies[i] != NULL)
             {
@@ -391,13 +394,13 @@ void physics()
             }
         }
         //animate towers
-        for (int i=0; i<64; ++i)
+        for (int i=0; i<nTowers; ++i)
         {
             if (towers[i] != NULL && !towers[i]->wireframe)
             {
                 //select closest target
                 float dist = INFINITY;
-                for (int j=0; j<64; ++j)
+                for (int j=0; j<nEnemies; ++j)
                 {
                     if (enemies[j] != NULL)
                     {
@@ -429,7 +432,7 @@ void physics()
             }
         }
         //animate bullets
-        for (int i=0; i<128; ++i)
+        for (int i=0; i<nBullets; ++i)
         {
             if (bullets[i] != NULL)
             {
@@ -593,15 +596,27 @@ void handleEvents()
                     {
                         case SDL_SCANCODE_W:
                             cursory += 1;
+                            if (cursory >= F.getHeight())
+                                cursory = F.getHeight()-1;
+                            (*placement_tower)->y = 2.0*cursory-F.getHeight();
                             break;
                         case SDL_SCANCODE_S:
                             cursory -= 1;
+                            if (cursory < 0)
+                                cursory = 0;
+                            (*placement_tower)->y = 2.0*cursory-F.getHeight();
                             break;
                         case SDL_SCANCODE_D:
                             cursorx += 1;
+                            if (cursorx >= F.getWidth())
+                                cursorx = F.getWidth()-1;
+                            (*placement_tower)->x = 2.0*cursorx-F.getWidth();
                             break;
                         case SDL_SCANCODE_A:
                             cursorx -= 1;
+                            if (cursorx < 0)
+                                cursorx = 0;
+                            (*placement_tower)->x = 2.0*cursorx-F.getWidth();
                             break;
                         case SDL_SCANCODE_RETURN:
                             //Activate the Tower and Exit Placement
@@ -621,16 +636,6 @@ void handleEvents()
                         default:
                             break;
                     }
-                    if (cursorx < 0)
-                        cursorx = 0;
-                    if (cursorx >= F.getWidth())
-                        cursorx = F.getWidth()-1;
-                    if (cursory < 0)
-                        cursory = 0;
-                    if (cursory >= F.getHeight())
-                        cursory = F.getHeight()-1;
-                    (*placement_tower)->x = 2.0*cursorx-F.getWidth();
-                    (*placement_tower)->y = 2.0*cursory-F.getHeight();
                 }
                 if (event.key.keysym.scancode == SDL_SCANCODE_SPACE)
                     pause = 1 - pause;
@@ -737,14 +742,17 @@ int main(int argc, char *argv[])
     cout << "Shutting Down\n";
     cout << "average framerate: " << 1000*(float)frames/(r - startuptime) << endl;
 
-    for (int i=0; i<64; ++i)
+    for (int i=0; i<nEnemies; ++i)
     {
         if (enemies[i] != NULL)
             delete enemies[i];
+    }
+    for (int i=0; i<nTowers; ++i)
+    {
         if (towers[i] != NULL)
             delete towers[i];
     }
-    for (int i=0; i<128; ++i)
+    for (int i=0; i<nBullets; ++i)
     {
         if (bullets[i] != NULL)
             delete bullets[i];

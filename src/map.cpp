@@ -27,7 +27,7 @@ void Map::setLives(int x) {
 }
 
 void Map::decrementLives() {
-    lives = getLives() - 1;
+    lives -= 1;
 }
 
 Tile & Map::operator[](Position pos) {
@@ -88,17 +88,15 @@ void Map::render() {
     glPopMatrix();
 
     if (getLives() > 0) {
-        glColor3f(0.4,0.8,0.4);
-        float emission[4] = {0.0,0.4,0.0,1.0};
+        glColor3f(0.8,0.4,0.4);
+        float emission[4] = {0.4,0.0,0.0,1.0};
         glMaterialfv(GL_FRONT, GL_EMISSION, emission);
-        for (int i = 0; i < lives; ++i) {
-            if (i < 2) {
-                cube(8.5, 1.5*i, -6.0, 0, 1.0);
-            }
-            else {
-                cube(10.0, 1.5*(i%2), -6.0 + 1.5*((i-2)/2), 0, 1.0);
-            }
-        }
+        cube(8.0, 1.5, -8.0, 0, 1.0);
+        glColor3f(0.4,0.8,0.4);
+        emission[0] = 0.0;
+        emission[1] = 0.4;
+        glMaterialfv(GL_FRONT, GL_EMISSION, emission);
+        cube(-10.0, 1.5, -8.0, 0, 1.0);
     }
     else {
         bool pixels[7][53] = {{0,1,1,1,0, 0, 0,1,1,1,0, 0, 0,1,0,1,0, 0, 1,1,1,1,1, 0, 0,0,0,0,0, 0, 0,1,1,1,0, 0, 1,0,0,0,1, 0, 1,1,1,1,1, 0, 1,1,1,1,0},
