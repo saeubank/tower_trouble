@@ -33,9 +33,9 @@ Tile & Map::operator[](Position pos) {
     return map[pos.first][pos.second];
 }
 
-//const Tile & Map::operator[](Position pos) const {
-//    return map[pos.first][pos.second];
-//}
+const Tile & Map::operator[](Position pos) const {
+   return map[pos.first][pos.second];
+}
 
 Tile Map::getTile(Position pos) const {
     return map[pos.first][pos.second];
@@ -181,7 +181,9 @@ std::vector<Position> Map::getNeighbors(Position pos) {
 }
 
 float Map::getHValue(Position cur, Position end) {
-    return sqrt(pow((cur.first - end.first), 2) + pow((cur.second - end.second), 2));
+    int dx = cur.first - end.first;
+    int dy = cur.second - end.second;
+    return sqrt(dx * dx + dy * dy);
 }
 
 namespace std {
@@ -228,7 +230,7 @@ std::vector<Position> Map::AStar(Position start, Position end) {
             return path;
         }
         for (auto& next : getNeighbors(cur)) {
-              float new_cost = cost_so_far[cur] + 1; 
+              float new_cost = cost_so_far[cur] + 1;
               if (!cost_so_far.count(next) || new_cost < cost_so_far[next]) {
                 cost_so_far[next] = new_cost;
                 float priority = new_cost + getHValue(next, end);
