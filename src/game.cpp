@@ -41,8 +41,8 @@ int h = 1080;
 int mode = 1;  // 1 = play, 0 = place
 
 //tower placement cursor position
-float cursorx = 0.0;
-float cursory = 0.0;
+int cursorx = 0;
+int cursory = 0;
 Tower** placement_tower = NULL;
 
 //eye position and orientation
@@ -592,36 +592,47 @@ void handleEvents()
                     switch (event.key.keysym.scancode)
                     {
                         case SDL_SCANCODE_W:
-                            cursory += 2.0;
-                            (*placement_tower)->y = cursory;
+                            cursory += 1;
+                            (*placement_tower)->y = 2.0*cursory-F.getHeight();
                             break;
                         case SDL_SCANCODE_S:
-                            cursory -= 2.0;
-                            (*placement_tower)->y = cursory;
+                            cursory -= 1;
+                            (*placement_tower)->y = 2.0*cursory-F.getHeight();
                             break;
                         case SDL_SCANCODE_D:
-                            cursorx += 2.0;
-                            (*placement_tower)->x = cursorx;
+                            cursorx += 1;
+                            (*placement_tower)->x = 2.0*cursorx-F.getWidth();
                             break;
                         case SDL_SCANCODE_A:
-                            cursorx -= 2.0;
-                            (*placement_tower)->x = cursorx;
+                            cursorx -= 1;
+                            (*placement_tower)->x = 2.0*cursorx-F.getWidth();
                             break;
                         case SDL_SCANCODE_RETURN:
                             //Activate the Tower and Exit Placement
 			    //Position cursorpos(cursorx, cursory);
 			    //cursorpos.x = cursorx;
                             //cursorpos.y = cursory;
-                            if (F.isEmpty(Position((int)cursorx, (int)cursory)))//cursorpos))
+                            cout << "checking if empty\n" << cursorx << "\t" << cursory << endl;
+                            if (F.isEmpty(Position(cursorx, cursory)))//cursorpos))
                             {
+                                cout << "changing tower variables\n";
                                 (*placement_tower)->wireframe = false;
                                 placement_tower = NULL;
                                 mode = 1;
                             }
+                            cout << "done\n";
                             break;
                         default:
                             break;
                     }
+                    if (cursorx < 0)
+                        cursorx = 0;
+                    if (cursorx >= F.getWidth())
+                        cursorx = F.getWidth()-1;
+                    if (cursory < 0)
+                        cursory = 0;
+                    if (cursory >= F.getHeight())
+                        cursory = F.getHeight()-1;
                 }
                 if (event.key.keysym.scancode == SDL_SCANCODE_SPACE)
                     pause = 1 - pause;
