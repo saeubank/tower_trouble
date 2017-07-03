@@ -78,7 +78,7 @@ void Map::renderTile(float x, float y, float z) {
 
 void Map::render() {
     glPushMatrix();
-    glTranslated(-width,0,-height);
+    glTranslated(-width,0,-height+2);
 
     for (int i = 0; i < getWidth(); ++i) {
         for (int j = 0; j < getHeight(); ++j) {

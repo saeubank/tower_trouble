@@ -578,34 +578,30 @@ void handleEvents()
                     {
                         // Enter Tower Placement Mode
                         mode = 0;
-                        cursorx = 0;
-                        cursory = 0;
+                        cursorx = (F.getWidth()+1)/2;
+                        cursory = (F.getHeight()+1)/2;
                         int i = 0;
                         while (towers[i] != NULL)
                             ++i;
-                        towers[i] = new Tower(cursorx, cursory, 1);
+                        towers[i] = new Tower(2.0*cursorx-F.getWidth(), 2.0*cursory-F.getHeight(), 1);
                         placement_tower = &towers[i];
                     }
                 }
-                else //mode == 0 aka Tower Placement Mode
+                else //mode == 0 , in Tower Placement Mode
                 {
                     switch (event.key.keysym.scancode)
                     {
                         case SDL_SCANCODE_W:
                             cursory += 1;
-                            (*placement_tower)->y = 2.0*cursory-F.getHeight();
                             break;
                         case SDL_SCANCODE_S:
                             cursory -= 1;
-                            (*placement_tower)->y = 2.0*cursory-F.getHeight();
                             break;
                         case SDL_SCANCODE_D:
                             cursorx += 1;
-                            (*placement_tower)->x = 2.0*cursorx-F.getWidth();
                             break;
                         case SDL_SCANCODE_A:
                             cursorx -= 1;
-                            (*placement_tower)->x = 2.0*cursorx-F.getWidth();
                             break;
                         case SDL_SCANCODE_RETURN:
                             //Activate the Tower and Exit Placement
@@ -633,6 +629,8 @@ void handleEvents()
                         cursory = 0;
                     if (cursory >= F.getHeight())
                         cursory = F.getHeight()-1;
+                    (*placement_tower)->x = 2.0*cursorx-F.getWidth();
+                    (*placement_tower)->y = 2.0*cursory-F.getHeight();
                 }
                 if (event.key.keysym.scancode == SDL_SCANCODE_SPACE)
                     pause = 1 - pause;
