@@ -5,7 +5,7 @@ LIBS=-lglut32cu -lglu32 -lopengl32
 CLEAN=del *.exe *.o *.a
 else
 #  OSX
-ifeq "$(shell uname)" "Darwin"
+ifeq ("$(shell uname)","Darwin")
 CFLG=-g -O3 -Wall -Wno-deprecated-declarations $(shell sdl2-config --cflags)
 LIBS=-framework OpenGL $(shell sdl2-config --libs)
 #  Linux/Unix/Solaris
@@ -17,7 +17,6 @@ endif
 CLEAN=rm -rf run *.o *.a *.dSYM
 endif
 
-CFLG=-g -Wall -Wno-deprecated-declarations $(shell sdl2-config --cflags)
 all:run
 
 #  Compile
@@ -49,8 +48,8 @@ text.o: text.cpp text.h
 
 #  link
 run:game.o map.o enemy.o tower.o objects.o text.o
-	#g++ -g -O3 -o run $^ $(LIBS) -lSDL2_ttf
 	g++ -g -o run $^ $(LIBS) -lSDL2_ttf -I/usr/local/include -I/usr/local/include/cppconn -lmysqlcppconn
+	#g++ -g -o run $^ $(LIBS) -lSDL2_ttf -I/usr/local/include -I/usr/local/include/cppconn -lmysqlcppconn
 
 #  Clean
 clean:
