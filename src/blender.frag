@@ -1,3 +1,5 @@
+#version 120
+
 uniform float dX;
 uniform float dY;
 uniform sampler2D img;
