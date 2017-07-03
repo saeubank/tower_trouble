@@ -1,3 +1,4 @@
+#version 120
 //  Per Pixel Lighting shader
 
 varying vec3 View;
