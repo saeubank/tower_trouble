@@ -110,10 +110,11 @@ Bullet* bullets[128] = {NULL};
 ////////////////////
 //functions that are called ahead of when they're defined
 //because C
-
 void reshape(int width, int height);
 void keyboard(const Uint8* state);
 
+// Connect and put score in database
+void dbInsert();
 //////// SDL Init Function ////////
 
 bool init()
@@ -161,34 +162,7 @@ bool init()
 
 void GameOver()
 {
-    string url = HOST;
-    const string user = USER;
-    const string pass = PASS;
-    const string database = DB;
-    try {
-        sql::Driver* driver = get_driver_instance();
-        std::auto_ptr<sql::Connection> con(driver->connect(url, user, pass));
-        con->setSchema(database);
-        std::auto_ptr<sql::Statement> stmt(con->createStatement());
-
-        // CALL the procedure to add scores
-        stmt->execute("CALL add_score('test'," + "1233445" + ")");
-    } catch (sql::SQLException &e) {
-        /*
-        MySQL Connector/C++ throws three different exceptions:
-
-        - sql::MethodNotImplementedException (derived from sql::SQLException)
-        - sql::InvalidArgumentException (derived from sql::SQLException)
-        - sql::SQLException (derived from std::runtime_error)
-        */
-        cout << "# ERR: SQLException in " << __FILE__;
-        cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << endl;
-        /* what() (derived from std::runtime_error) fetches error message */
-        cout << "# ERR: " << e.what();
-        cout << " (MySQL error code: " << e.getErrorCode();
-        cout << ", SQLState: " << e.getSQLState() << " )" << endl;
-        cout << "Procedure failed!";
-    }
+    dbInsert();
 
     for (int i=0; i < 64; ++i)
     {
@@ -404,6 +378,41 @@ void display()
     SDL_GL_SwapWindow(window);
 }
 
+void dbInsert() {
+    string url = HOST;
+    const string user = USER;
+    const string pass = PASS;
+    const string database = DB;
+    try {
+        sql::Driver* driver = get_driver_instance();
+        std::auto_ptr<sql::Connection> con(driver->connect(url, user, pass));
+        con->setSchema(database);
+        std::auto_ptr<sql::Statement> stmt(con->createStatement());
+
+        // CALL the procedure to add scores
+        std::string str1 = "CALL add_score('test',";
+        std::string str2 = "1233445";
+        std::string str3 = ")";  //TODO get score as string
+        stmt->execute(str1 + str2 + str3);
+    } catch (sql::SQLException &e) {
+        /*
+        MySQL Connector/C++ throws three different exceptions:
+
+        - sql::MethodNotImplementedException (derived from sql::SQLException)
+        - sql::InvalidArgumentException (derived from sql::SQLException)
+        - sql::SQLException (derived from std::runtime_error)
+        */
+        cout << "# ERR: SQLException in " << __FILE__;
+        cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << endl;
+        /* what() (derived from std::runtime_error) fetches error message */
+        cout << "# ERR: " << e.what();
+        cout << " (MySQL error code: " << e.getErrorCode();
+        cout << ", SQLState: " << e.getSQLState() << " )" << endl;
+        cout << "Procedure failed!";
+    }
+}
+
+
 void physics()
 {
     const Uint8* state = SDL_GetKeyboardState(NULL);
@@ -507,8 +516,7 @@ void physics()
                         {
                             delete *(bullets[i]->target);
                             *(bullets[i]->target) = NULL;
-                            // Get points
-                            F.points ++;
+                            // TODO Get points
                         }
                         delete bullets[i];
                         bullets[i] = NULL;
