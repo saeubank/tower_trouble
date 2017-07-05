@@ -1,9 +1,9 @@
 
 #ifndef STDIncludes
 #define STDIncludes
-#include <stdlib.h>
-#include <stdio.h>
-#include <math.h>
+#include <cstdlib>
+#include <cstdio>
+#include <cmath>
 #ifdef __APPLE__
 #include <OpenGL/glu.h>
 #else
@@ -12,7 +12,18 @@
 #endif
 
 #include <iostream>
+// For database connection:
+#include <mysql_connection.h>
+#include <cppconn/driver.h>
+#include <cppconn/exception.h>
+#include <cppconn/resultset.h>
+#include <cppconn/statement.h>
+#include <cppconn/prepared_statement.h>
 
+#define HOST "localhost"
+#define USER "root"
+#define PASS ""
+#define DB "scores"
 //#include "CSCIx229.h"
 #include <SDL.h>
 #include <SDL_opengl.h>
@@ -21,6 +32,7 @@
 #include "enemy.h"
 #include "tower.h"
 #include "objects.h"
+#include "text.h"
 
 using namespace std;
 
@@ -82,7 +94,7 @@ SDL_GLContext context;
 int r = 0;
 int dr = 0;
 int oldr = 0;
-int pause = 0;
+int Pause = 0;
 int frames = 0;
 
 //Game Objects
@@ -97,10 +109,11 @@ Bullet* bullets[nBullets] = {NULL};
 ////////////////////
 //functions that are called ahead of when they're defined
 //because C
-
 void reshape(int width, int height);
 void keyboard(const Uint8* state);
 
+// Connect and put score in database
+void dbInsert();
 //////// SDL Init Function ////////
 
 bool init()
@@ -134,6 +147,13 @@ bool init()
 //        success = false;
     }
 
+    //TTF_Font handling
+    if (TTF_Init() < 0)
+    {
+        cerr << "TTF font library could not be initialized: " << TTF_GetError() << endl;
+        success = false;
+    }
+
     return success;
 }
 
@@ -141,6 +161,7 @@ bool init()
 
 void GameOver()
 {
+    dbInsert();
     for (int i=0; i < nEnemies; ++i)
     {
         if (enemies[i] != NULL)
@@ -343,10 +364,52 @@ void display()
     glDisable(GL_BLEND);
     glDisable(GL_TEXTURE_2D);
 
+    glUseProgram(0);
+    //RenderText("This is test text.", (SDL_Color){255,0,255}, w/2, h/2, 200, window);
+    string lives = "Lives: " + to_string(20);
+    string points = "Points: " + to_string(1472583690);
+    RenderText(lives, (SDL_Color){255,255,255}, 20, h-h/20, h/20, window);
+    RenderText(points, (SDL_Color){255,255,255}, w-300, h-h/20, h/20, window);
+
     //swap the buffers
     glFlush();
     SDL_GL_SwapWindow(window);
 }
+
+void dbInsert() {
+    string url = HOST;
+    const string user = USER;
+    const string pass = PASS;
+    const string database = DB;
+    try {
+        sql::Driver* driver = get_driver_instance();
+        std::auto_ptr<sql::Connection> con(driver->connect(url, user, pass));
+        con->setSchema(database);
+        std::auto_ptr<sql::Statement> stmt(con->createStatement());
+
+        // CALL the procedure to add scores
+        std::string str1 = "CALL add_score('test',";
+        std::string str2 = "1233445";
+        std::string str3 = ")";  //TODO get score as string
+        stmt->execute(str1 + str2 + str3);
+    } catch (sql::SQLException &e) {
+        /*
+        MySQL Connector/C++ throws three different exceptions:
+
+        - sql::MethodNotImplementedException (derived from sql::SQLException)
+        - sql::InvalidArgumentException (derived from sql::SQLException)
+        - sql::SQLException (derived from std::runtime_error)
+        */
+        cout << "# ERR: SQLException in " << __FILE__;
+        cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << endl;
+        /* what() (derived from std::runtime_error) fetches error message */
+        cout << "# ERR: " << e.what();
+        cout << " (MySQL error code: " << e.getErrorCode();
+        cout << ", SQLState: " << e.getSQLState() << " )" << endl;
+        cout << "Procedure failed!";
+    }
+}
+
 
 void physics()
 {
@@ -358,7 +421,7 @@ void physics()
     ph += dph;
     zoom = zoom<2.0?2.0:zoom+dzoom;
 
-    if (!pause)
+    if (!Pause)
     {
         //move the light
         ltheta += M_PI/180;
@@ -452,6 +515,7 @@ void physics()
                         {
                             delete *(bullets[i]->target);
                             *(bullets[i]->target) = NULL;
+                            // TODO Get points
                         }
                         delete bullets[i];
                         bullets[i] = NULL;
@@ -462,7 +526,7 @@ void physics()
     }
 }
 
-// this function stolen from class examples
+// this function stolen from 4229 class examples
 char* ReadText(char* file)
 {
     int n;
@@ -481,7 +545,7 @@ char* ReadText(char* file)
     return buffer;
 }
 
-// this function stolen from class examples
+// this function stolen from 4229 class examples
 int CreateShader(GLenum type, char* file)
 {
     // Create the shader
@@ -497,7 +561,7 @@ int CreateShader(GLenum type, char* file)
     return shader;
 }
 
-// this function stolen (mostly) from class examples
+// this function stolen (mostly) from 4229 class examples
 int CreateShaderProg(char* VertFile, char* FragFile)
 {
     // Create program
@@ -634,7 +698,7 @@ void handleEvents()
                     }
                 }
                 if (event.key.keysym.scancode == SDL_SCANCODE_SPACE)
-                    pause = 1 - pause;
+                    Pause = 1 - Pause;
                 else if (event.key.keysym.scancode == SDL_SCANCODE_M || event.key.keysym.scancode == SDL_SCANCODE_N)
                 {
                     if (event.key.keysym.scancode == SDL_SCANCODE_M)

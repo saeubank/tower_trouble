@@ -4,4 +4,4 @@ run:
 	$(MAKE) -C $(CODE_DIR) && cp src/run ./
 
 clean:
-	rm run && $(MAKE) clean -C $(CODE_DIR)
+	rm -f run && $(MAKE) clean -C $(CODE_DIR)
