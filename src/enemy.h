@@ -15,7 +15,7 @@ public:
     Position nxt;
     Map* F;
 
-    Enemy(int X, int Y, int Health, int Type, Map F);
+    Enemy(int X, int Y, int Health, int Type, Map *F);
     void render();
     void animate();
     void damage(int dmg);

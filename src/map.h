@@ -84,6 +84,7 @@ class Map
     int spawncount = -1;
     int width, height;
     int lives;
+    Position goal = {width-1,height-1};
 
     std::vector<std::vector<Tile> > map;
 
@@ -95,6 +96,7 @@ public:
     int spawnEnemy();
     void spawnWave();
     int getlocation(float ex, float ey);
+    Position getGoal();
 
     Map(int width, int height, int lives);
     int getWidth() const;

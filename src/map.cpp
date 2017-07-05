@@ -5,6 +5,7 @@
 #include <tuple>
 #include <unordered_map>
 #include <algorithm>
+#include <iostream>
 
 Map::Map(int width, int height, int lives): width(width), height(height), lives(lives), map(width,std::vector<Tile>(height, Tile(TileType::GROUND))) {
 //    makeMap();
@@ -158,6 +159,11 @@ bool Map::setTower(TileType tower, Position pos) {
     return false;
 }
 
+Position Map::getGoal()
+{
+    return goal;
+}
+
 std::vector<Position> Map::getNeighbors(Position pos) {
     std::vector<Position> neighbors;
     Position up = Position(pos.first - 1, pos.second);
@@ -207,7 +213,7 @@ namespace std {
 }
 
 std::vector<Position> Map::AStar(Position start, Position end) {
-    std::vector<Position> closed;
+    //std::vector<Position> closed;
     PriorityQueue<Position, float> open;
     open.put(start, getHValue(start, end));
     std::unordered_map<Position, Position> came_from;
@@ -218,13 +224,14 @@ std::vector<Position> Map::AStar(Position start, Position end) {
 
     while (!open.empty()) {
         auto cur = open.get();
+        //std::cout << cur.first << "\t" << cur.second << std::endl;
         if (cur == end) {
             path.push_back(cur);
             while (cur != start) {
                 cur = came_from[cur];
                 path.push_back(cur);
             }
-            path.push_back(start);
+            //path.push_back(start);
             std::reverse(path.begin(), path.end());
             return path;
         }

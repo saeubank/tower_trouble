@@ -2,13 +2,18 @@
 #include <iostream>
 using namespace std;
 
-Enemy::Enemy(int X, int Y, int Health, int Type, Map f)
+Enemy::Enemy(int X, int Y, int Health, int Type, Map *f)
 {
-    F = &f;
+    F = f;
     type = Type;
     health = Health;
     cur.first = X;
     cur.second = Y;
+    std::vector<Position> path = F->AStar(cur, F->getGoal());
+    nxt = path[1];
+    //cout << nxt.first << " " << nxt.second << endl;
+    //nxt.first = X;
+    //nxt.second = Y;
     x = 2.0*cur.first - F->getWidth();
     y = 2.0*cur.second - F->getHeight();
     z = 2;
@@ -24,7 +29,8 @@ Enemy::Enemy(int X, int Y, int Health, int Type, Map f)
         speed = 0.04;
         health *= 2;
     }
-    dx = speed; dy = 0;
+    dx = (nxt.first - cur.first) * speed;
+    dy = (nxt.second - cur.second) * speed;
 
     if (type == 2)
     {
@@ -131,12 +137,20 @@ void Enemy::animate()
     x += dx; y += dy;
     
     //Pathfinding
-    cout << cur.first << " " << cur.second << " " << (cur.first*2.0 - F->getWidth()) << " " << (cur.second*2.0 - F->getHeight()) << endl;
-    if (x - (cur.first*2.0  - F->getWidth())  >= 2.0 ||
-        y - (cur.second*2.0 - F->getHeight()) >= 2.0)
+    //cout << cur.first << " " << cur.second << " " << (cur.first*2.0 - F->getWidth()) << " " << (cur.second*2.0 - F->getHeight()) << endl;
+    if (fabs(x - (cur.first*2.0  - F->getWidth()))  >= 2.0 ||
+        fabs(y - (cur.second*2.0 - F->getHeight())) >= 2.0)
     {
         cur = nxt;
-        nxt = F->AStar(cur, Position(F->getWidth()-1, F->getHeight()-1))[1];
+        x = cur.first*2.0  - F->getWidth();
+        y = cur.second*2.0  - F->getHeight();
+        std::vector<Position> path = F->AStar(cur, F->getGoal());
+        //for (int i=0; i < path.size(); ++i)
+        //{
+        //    cout << path[i].first << " " << path[i].second << endl;
+        //}
+        if (path.size() > 1)
+            nxt = path[1];
         dx = (nxt.first-cur.first) * speed;
         dy = (nxt.second-cur.second) * speed;
     } 

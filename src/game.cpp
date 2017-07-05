@@ -373,7 +373,7 @@ void physics()
             int i = 0;
             while (enemies[i]!=NULL)
                 ++i;
-            enemies[i] = new Enemy(-10,8, F.currentwave==0 ? 25 : 25*F.currentwave, newenemy, F);
+            enemies[i] = new Enemy(0,9, F.currentwave==0 ? 25 : 25*F.currentwave, newenemy, &F);
         }
 
         //animate enemies
@@ -623,6 +623,7 @@ void handleEvents()
                             //Activate the Tower and Exit Placement
                             if (F.isEmpty(Position(cursorx, cursory)))
                             {
+                                F.setTower(TileType::TOWER1, Position(cursorx, cursory));
                                 (*placement_tower)->wireframe = false;
                                 placement_tower = NULL;
                                 mode = 1;
