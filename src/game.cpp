@@ -19,6 +19,8 @@
 #include <cppconn/resultset.h>
 #include <cppconn/statement.h>
 #include <cppconn/prepared_statement.h>
+#include <iomanip>
+#include <sstream>
 
 #define HOST "localhost"
 #define USER "root"
@@ -39,6 +41,7 @@ using namespace std;
 //GLOBAL VARIABLES//
 //running or not
 bool quit = false;
+bool gameOver =false;
 
 //View Angles
 double th = 0;
@@ -113,7 +116,8 @@ void reshape(int width, int height);
 void keyboard(const Uint8* state);
 
 // Connect and put score in database
-void dbInsert();
+void dbInsert(string name);
+std::stringstream dbGetScores();
 //////// SDL Init Function ////////
 
 bool init()
@@ -161,7 +165,12 @@ bool init()
 
 void GameOver()
 {
-    dbInsert();
+    string name;
+    cin >> name;
+    
+    gameOver = true;
+    dbInsert(name);
+
     for (int i=0; i < nEnemies; ++i)
     {
         if (enemies[i] != NULL)
@@ -370,13 +379,72 @@ void display()
     string points = "Points: " + to_string(1472583690);
     RenderText(lives, (SDL_Color){255,255,255}, 20, h-h/20, h/20, window);
     RenderText(points, (SDL_Color){255,255,255}, w-300, h-h/20, h/20, window);
-
+    if (gameOver) {
+        stringstream ss = dbGetScores();
+        double height = 3*h/4;
+        double heightstep = h/20;
+        string temp;
+        while (getline(ss, temp)) {
+                RenderText(temp, (SDL_Color){0,0,0}, w/2.85 - 1, height + 1, h/15, window);
+                RenderText(temp, (SDL_Color){0,0,0}, w/2.85 + 1, height - 1, h/15, window);
+                RenderText(temp, (SDL_Color){255,255,255}, w/2.85, height, h/15, window);
+                height -= heightstep;
+        }
+    }
     //swap the buffers
     glFlush();
     SDL_GL_SwapWindow(window);
 }
 
-void dbInsert() {
+std::stringstream dbGetScores() {
+    string url = HOST;
+    const string user = USER;
+    const string pass = PASS;
+    const string database = DB;
+    std::stringstream results;
+    try {
+        sql::Driver* driver = get_driver_instance();
+        std::auto_ptr<sql::Connection> con(driver->connect(url, user, pass));
+        con->setSchema(database);
+        std::auto_ptr<sql::Statement> stmt(con->createStatement());
+
+        // CALL the procedure to get scores
+        stmt->execute("CALL getScores();");
+        std::auto_ptr< sql::ResultSet > res;
+        int ranking = 0;
+        do {
+            res.reset(stmt->getResultSet());
+            while (res->next()) {
+                ranking ++;
+                results << setw(2) <<to_string(ranking) << setw(30)
+                    << res->getString("user")
+                    << setw(30) << res->getString("score") << "\n";
+
+                // results.append(row.str());
+
+            }
+        } while (stmt->getMoreResults());
+    } catch (sql::SQLException &e) {
+        /*
+        MySQL Connector/C++ throws three different exceptions:
+
+        - sql::MethodNotImplementedException (derived from sql::SQLException)
+        - sql::InvalidArgumentException (derived from sql::SQLException)
+        - sql::SQLException (derived from std::runtime_error)
+        */
+        cout << "# ERR: SQLException in " << __FILE__;
+        cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << endl;
+        /* what() (derived from std::runtime_error) fetches error message */
+        cout << "# ERR: " << e.what();
+        cout << " (MySQL error code: " << e.getErrorCode();
+        cout << ", SQLState: " << e.getSQLState() << " )" << endl;
+        cout << "Procedure failed!";
+    }
+    return results;
+}
+
+
+void dbInsert(string name) {
     string url = HOST;
     const string user = USER;
     const string pass = PASS;
@@ -388,10 +456,10 @@ void dbInsert() {
         std::auto_ptr<sql::Statement> stmt(con->createStatement());
 
         // CALL the procedure to add scores
-        std::string str1 = "CALL add_score('test',";
-        std::string str2 = "1233445";
-        std::string str3 = ")";  //TODO get score as string
-        stmt->execute(str1 + str2 + str3);
+        std::string str1 = "CALL add_score('";
+        std::string str2 = "', 1233445";  //TODO get score as string
+        std::string str3 = ")";
+        stmt->execute(str1 + name + str2 + str3);
     } catch (sql::SQLException &e) {
         /*
         MySQL Connector/C++ throws three different exceptions:
