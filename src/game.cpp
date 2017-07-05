@@ -373,7 +373,7 @@ void physics()
             int i = 0;
             while (enemies[i]!=NULL)
                 ++i;
-            enemies[i] = new Enemy(-10,8, F.currentwave==0 ? 25 : 25*F.currentwave, newenemy);
+            enemies[i] = new Enemy(-10,8, F.currentwave==0 ? 25 : 25*F.currentwave, newenemy, F);
         }
 
         //animate enemies
@@ -383,6 +383,7 @@ void physics()
             {
                 enemies[i]->animate();
 
+                // if enemy has reached the exit
                 if (enemies[i]->x == 8.0 && enemies[i]->y == 6.0)
                 {
                     F.decrementLives();
@@ -620,18 +621,12 @@ void handleEvents()
                             break;
                         case SDL_SCANCODE_RETURN:
                             //Activate the Tower and Exit Placement
-			    //Position cursorpos(cursorx, cursory);
-			    //cursorpos.x = cursorx;
-                            //cursorpos.y = cursory;
-                            cout << "checking if empty\n" << cursorx << "\t" << cursory << endl;
-                            if (F.isEmpty(Position(cursorx, cursory)))//cursorpos))
+                            if (F.isEmpty(Position(cursorx, cursory)))
                             {
-                                cout << "changing tower variables\n";
                                 (*placement_tower)->wireframe = false;
                                 placement_tower = NULL;
                                 mode = 1;
                             }
-                            cout << "done\n";
                             break;
                         default:
                             break;

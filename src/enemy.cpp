@@ -1,11 +1,16 @@
 #include "enemy.h"
+#include <iostream>
+using namespace std;
 
-Enemy::Enemy(float X, float Y, int Health, int Type)
+Enemy::Enemy(int X, int Y, int Health, int Type, Map f)
 {
+    F = &f;
     type = Type;
     health = Health;
-    x = X;
-    y = Y;
+    cur.first = X;
+    cur.second = Y;
+    x = 2.0*cur.first - F->getWidth();
+    y = 2.0*cur.second - F->getHeight();
     z = 2;
     theta = 0.0;
     speed = 0.06;
@@ -19,7 +24,6 @@ Enemy::Enemy(float X, float Y, int Health, int Type)
         speed = 0.04;
         health *= 2;
     }
-    movestate = 0;
     dx = speed; dy = 0;
 
     if (type == 2)
@@ -126,65 +130,16 @@ void Enemy::animate()
 
     x += dx; y += dy;
     
-    //Follow the metal grey road
-    switch (movestate)
+    //Pathfinding
+    cout << cur.first << " " << cur.second << " " << (cur.first*2.0 - F->getWidth()) << " " << (cur.second*2.0 - F->getHeight()) << endl;
+    if (x - (cur.first*2.0  - F->getWidth())  >= 2.0 ||
+        y - (cur.second*2.0 - F->getHeight()) >= 2.0)
     {
-    case 0:
-        if (x >= -2.0)
-        {  movestate = 1; dx = 0; dy = -speed;}
-        break;
-    case 1:
-        if (y <= 2.0)
-        {  movestate = 2; dx = -speed; dy = 0;}
-        break;
-    case 2:
-        if (x <= -6.0)
-        {  movestate = 3; dx = 0; dy = -speed;}
-        break;
-    case 3:
-        if (y <= -6.0)
-        {  movestate = 4; dx = speed; dy = 0;}
-        break;
-    case 4:
-        if (x >= -2.0)
-        {  movestate = 5; dx = 0; dy = speed;}
-        break;
-    case 5:
-        if (y >= -2.0)
-        {  movestate = 6; dx = speed; dy = 0;}
-        break;
-    case 6:
-        if (x >= 2.0)
-        {  movestate = 7; dx = 0; dy = -speed;}
-        break;
-    case 7:
-        if (y <= -6.0)
-        {  movestate = 8; dx = speed; dy = 0;}
-        break;
-    case 8:
-        if (x >= 6.0)
-        {  movestate = 9; dx = 0; dy = speed;}
-        break;
-    case 9:
-        if (y >= 2.0)
-        {  movestate = 10; dx = -speed; dy = 0;}
-        break;
-    case 10:
-        if (x <= 2.0)
-        {  movestate = 11; dx = 0; dy = speed;}
-        break;
-    case 11:
-        if (y >= 6.0)
-        {  movestate = 12; dx = speed; dy = 0;}
-        break;
-    case 12:
-        if (x >= 8.0)
-        {  x = 8.0; y = 6.0; }
-        break;
-    default:
-        movestate = 0;
-        break;
-    }
+        cur = nxt;
+        nxt = F->AStar(cur, Position(F->getWidth()-1, F->getHeight()-1))[1];
+        dx = (nxt.first-cur.first) * speed;
+        dy = (nxt.second-cur.second) * speed;
+    } 
 }
 
 void Enemy::damage(int dmg)
