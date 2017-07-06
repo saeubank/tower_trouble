@@ -19,3 +19,20 @@
 _Warning: do not block path to exit, game will crash!_
 
 \* Match 3 not included in Alpha
+
+## Requirements
+
+Mac:
+
+```
+brew install sdl2
+brew install sdl2_ttf
+brew install freeglut
+```
+
+Ubuntu:
+```
+sudo apt install libsdl2-dev
+sudo apt install libsdl2-ttf-dev
+sudo apt install freeglut3-dev
+```
