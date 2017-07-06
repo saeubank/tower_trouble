@@ -101,7 +101,7 @@ int Pause = 0;
 int frames = 0;
 
 //Game Objects
-Map F(10, 10, 20);
+Map F(10, 10, 20, 0);
 const int nEnemies = 256;
 const int nTowers = 128;
 const int nBullets = 512;
@@ -167,7 +167,7 @@ void GameOver()
 {
     string name;
     cin >> name;
-    
+
     gameOver = true;
     dbInsert(name);
 
@@ -374,11 +374,22 @@ void display()
     glDisable(GL_TEXTURE_2D);
 
     glUseProgram(0);
-    //RenderText("This is test text.", (SDL_Color){255,0,255}, w/2, h/2, 200, window);
-    string lives = "Lives: " + to_string(20);
-    string points = "Points: " + to_string(1472583690);
+
+    //Render Text:
+    string lives = "Life: " + to_string(F.getLives());
+    string points = "Score: " + to_string(F.getScore());
+
+    //Show lives on screen
+    RenderText(lives, (SDL_Color){0,0,0}, 20-1, h-h/20+1, h/20, window);
+    RenderText(lives, (SDL_Color){0,0,0}, 20+1, h-h/20-1, h/20, window);
     RenderText(lives, (SDL_Color){255,255,255}, 20, h-h/20, h/20, window);
+
+    //Show points on screen
+    RenderText(points, (SDL_Color){0,0,0}, w-301, h-h/20+1, h/20, window);
+    RenderText(points, (SDL_Color){0,0,0}, w-299, h-h/20-1, h/20, window);
     RenderText(points, (SDL_Color){255,255,255}, w-300, h-h/20, h/20, window);
+
+    //Show highscores on screen if game over
     if (gameOver) {
         stringstream ss = dbGetScores();
         double height = 3*h/4;
@@ -457,9 +468,9 @@ void dbInsert(string name) {
 
         // CALL the procedure to add scores
         std::string str1 = "CALL add_score('";
-        std::string str2 = "', 1233445";  //TODO get score as string
+        std::string str2 = "',";  
         std::string str3 = ")";
-        stmt->execute(str1 + name + str2 + str3);
+        stmt->execute(str1 + name + str2 + to_string(F.getScore())+ str3);
     } catch (sql::SQLException &e) {
         /*
         MySQL Connector/C++ throws three different exceptions:
@@ -583,7 +594,7 @@ void physics()
                         {
                             delete *(bullets[i]->target);
                             *(bullets[i]->target) = NULL;
-                            // TODO Get points
+                            F.incrementScore(100);
                         }
                         delete bullets[i];
                         bullets[i] = NULL;
