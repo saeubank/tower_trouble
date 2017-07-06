@@ -7,7 +7,7 @@
 #include <algorithm>
 #include <iostream>
 
-Map::Map(int width, int height, int lives): width(width), height(height), lives(lives), map(width,std::vector<Tile>(height, Tile(TileType::GROUND))) {
+Map::Map(int width, int height, int lives, int score): width(width), height(height), lives(lives), score(score), map(width,std::vector<Tile>(height, Tile(TileType::GROUND))) {
 //    makeMap();
 }
 
@@ -260,4 +260,14 @@ void Map::makeMap() {
             // }
         }
     }
+}
+
+
+// Score functions
+int Map::getScore() {
+    return score;
+}
+
+void Map::incrementScore(int points) {
+    score += points;
 }

@@ -84,6 +84,7 @@ class Map
     int spawncount = -1;
     int width, height;
     int lives;
+    int score;
     Position goal = {width-1,height-1};
 
     std::vector<std::vector<Tile> > map;
@@ -98,7 +99,7 @@ public:
     int getlocation(float ex, float ey);
     Position getGoal();
 
-    Map(int width, int height, int lives);
+    Map(int width, int height, int lives, int score);
     int getWidth() const;
     int getHeight() const;
     int getLives() const;
@@ -113,6 +114,9 @@ public:
     std::vector<Position> getNeighbors(Position pos);
     float getHValue(Position cur, Position end);
     std::vector<Position> AStar(Position start, Position end);
+
+    int getScore();
+    void incrementScore(int points);
 };
 
 #endif
