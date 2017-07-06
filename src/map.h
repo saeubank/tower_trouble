@@ -84,7 +84,8 @@ class Map
     int spawncount = -1;
     int width, height;
     int lives;
-    int score;
+    int score = 0;
+    int money;
     Position goal = {width-1,height-1};
 
     std::vector<std::vector<Tile> > map;
@@ -103,6 +104,8 @@ public:
     int getWidth() const;
     int getHeight() const;
     int getLives() const;
+    int getMoney() const;
+    void setMoney(int x);
     void setLives(int x);
     void decrementLives();
     Tile & operator[](Position pos);

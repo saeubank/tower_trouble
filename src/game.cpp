@@ -101,7 +101,7 @@ int Pause = 0;
 int frames = 0;
 
 //Game Objects
-Map F(10, 10, 20, 0);
+Map F(10, 10, 20, 50);
 const int nEnemies = 256;
 const int nTowers = 128;
 const int nBullets = 512;
@@ -378,6 +378,7 @@ void display()
     //Render Text:
     string lives = "Life: " + to_string(F.getLives());
     string points = "Score: " + to_string(F.getScore());
+    string money = "Moneys: " + to_string(F.getMoney());
 
     //Show lives on screen
     RenderText(lives, (SDL_Color){0,0,0}, 20-1, h-h/20+1, h/20, window);
@@ -388,6 +389,11 @@ void display()
     RenderText(points, (SDL_Color){0,0,0}, w-301, h-h/20+1, h/20, window);
     RenderText(points, (SDL_Color){0,0,0}, w-299, h-h/20-1, h/20, window);
     RenderText(points, (SDL_Color){255,255,255}, w-300, h-h/20, h/20, window);
+
+    //Show money on the screen
+    RenderText(money, (SDL_Color){0,0,0}, w/2-59, h-h/20+1, h/20, window);
+    RenderText(money, (SDL_Color){0,0,0}, w/2-61, h-h/20-1, h/20, window);
+    RenderText(money, (SDL_Color){255,255,255}, w/2-60, h-h/20, h/20, window);
 
     //Show highscores on screen if game over
     if (gameOver) {
@@ -496,9 +502,9 @@ void physics()
     keyboard(state);
 
     //adjust the eye position
-    th += dth;
-    ph += dph;
-    zoom = zoom<2.0?2.0:zoom+dzoom;
+    //th += dth;
+    //ph += dph;
+    //zoom = zoom<2.0?2.0:zoom+dzoom;
 
     if (!Pause)
     {
@@ -595,7 +601,8 @@ void physics()
                         {
                             delete *(bullets[i]->target);
                             *(bullets[i]->target) = NULL;
-                            F.incrementScore(100);
+                            F.incrementScore(100*(F.currentwave+1));
+                            F.setMoney(+10);
                         }
                         delete bullets[i];
                         bullets[i] = NULL;
@@ -737,8 +744,15 @@ void handleEvents()
                 }
                 else //mode == 0 , in Tower Placement Mode
                 {
+                    int towerCost = 20;
                     switch (event.key.keysym.scancode)
                     {
+                        case SDL_SCANCODE_Q:
+                            mode = 1;
+                            delete (*placement_tower);
+                            (*placement_tower) = NULL;
+                            placement_tower = NULL;
+                            break;
                         case SDL_SCANCODE_W:
                             cursory += 1;
                             if (cursory >= F.getHeight())
@@ -765,12 +779,13 @@ void handleEvents()
                             break;
                         case SDL_SCANCODE_RETURN:
                             //Activate the Tower and Exit Placement
-                            if (F.isEmpty(Position(cursorx, cursory)))
+                            if (F.getMoney() >= towerCost && F.isEmpty(Position(cursorx, cursory)))
                             {
                                 F.setTower(TileType::TOWER1, Position(cursorx, cursory));
                                 (*placement_tower)->wireframe = false;
                                 placement_tower = NULL;
                                 mode = 1;
+                                F.setMoney(-towerCost);
                             }
                             break;
                         default:

@@ -140,7 +140,7 @@ Bullet::Bullet(float X, float Y, float Z, Enemy** Target)
     y = Y;
     z = Z;
     target = Target;
-    dmg = 10;
+    dmg = 4;
     speed = 0.25;
 }
 

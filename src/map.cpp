@@ -7,7 +7,7 @@
 #include <algorithm>
 #include <iostream>
 
-Map::Map(int width, int height, int lives, int score): width(width), height(height), lives(lives), score(score), map(width,std::vector<Tile>(height, Tile(TileType::GROUND))) {
+Map::Map(int width, int height, int lives, int money): width(width), height(height), lives(lives), money(money), map(width,std::vector<Tile>(height, Tile(TileType::GROUND))) {
 //    makeMap();
 }
 
@@ -21,6 +21,14 @@ int Map::getHeight() const {
 
 int Map::getLives() const {
     return lives;
+}
+
+int Map::getMoney() const {
+    return money;
+}
+
+void Map::setMoney(int x) {
+    money += x;
 }
 
 void Map::setLives(int x) {
@@ -88,18 +96,17 @@ void Map::render() {
     }
     glPopMatrix();
 
-    if (getLives() > 0) {
-        glColor3f(0.8,0.4,0.4);
-        float emission[4] = {0.4,0.0,0.0,1.0};
-        glMaterialfv(GL_FRONT, GL_EMISSION, emission);
-        cube(8.0, 1.5, -8.0, 0, 1.0);
-        glColor3f(0.4,0.8,0.4);
-        emission[0] = 0.0;
-        emission[1] = 0.4;
-        glMaterialfv(GL_FRONT, GL_EMISSION, emission);
-        cube(-10.0, 1.5, -8.0, 0, 1.0);
-    }
-    else {
+    glColor3f(0.8,0.4,0.4);
+    float emission[4] = {0.4,0.0,0.0,1.0};
+    glMaterialfv(GL_FRONT, GL_EMISSION, emission);
+    cube(8.0, 1.5, -8.0, 0, 1.0);
+    glColor3f(0.4,0.8,0.4);
+    emission[0] = 0.0;
+    emission[1] = 0.4;
+    glMaterialfv(GL_FRONT, GL_EMISSION, emission);
+    cube(-10.0, 1.5, -8.0, 0, 1.0);
+
+    if (getLives() <= 0) {
         bool pixels[7][53] = {{0,1,1,1,0, 0, 0,1,1,1,0, 0, 0,1,0,1,0, 0, 1,1,1,1,1, 0, 0,0,0,0,0, 0, 0,1,1,1,0, 0, 1,0,0,0,1, 0, 1,1,1,1,1, 0, 1,1,1,1,0},
                                      {1,0,0,0,1, 0, 1,0,0,0,1, 0, 1,0,1,0,1, 0, 1,0,0,0,0, 0, 0,0,0,0,0, 0, 1,0,0,0,1, 0, 1,0,0,0,1, 0, 1,0,0,0,0, 0, 1,0,0,0,1},
                                      {1,0,0,0,0, 0, 1,0,0,0,1, 0, 1,0,1,0,1, 0, 1,0,0,0,0, 0, 0,0,0,0,0, 0, 1,0,0,0,1, 0, 1,0,0,0,1, 0, 1,0,0,0,0, 0, 1,0,0,0,1},
