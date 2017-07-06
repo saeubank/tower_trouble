@@ -10,7 +10,7 @@ main() {
 
    char *server = "localhost";
    char *user = "root";
-   char *password = "user"; /* set me first */
+   char *password = "user";
    char *database = "tower";
 
    connection = mysql_init(NULL);
