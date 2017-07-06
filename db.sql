@@ -1,4 +1,4 @@
-CREATE DATABASE tower is not exists;
+CREATE DATABASE tower if not exists;
 USE tower;
 CREATE TABLE if not exists 'Players' (
  'Player' integer NOT NULL,
