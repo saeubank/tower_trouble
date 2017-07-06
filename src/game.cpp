@@ -166,6 +166,7 @@ bool init()
 void GameOver()
 {
     string name;
+    cout << "Enter your name\n";
     cin >> name;
 
     gameOver = true;
@@ -796,25 +797,25 @@ void handleEvents()
                     Pause = 1 - Pause;
                 else if (event.key.keysym.scancode == SDL_SCANCODE_M || event.key.keysym.scancode == SDL_SCANCODE_N)
                 {
-                    if (event.key.keysym.scancode == SDL_SCANCODE_M)
-                    {
-                        // DEMO
-                        if (F.currentwave < 3)
-                            F.currentwave = 3;
+                    //if (event.key.keysym.scancode == SDL_SCANCODE_M)
+                    //{
+                    //    // DEMO
+                    //    if (F.currentwave < 3)
+                    //        F.currentwave = 3;
 
-                        if (towers[0] == NULL)
-                            towers[0] = new Tower(0.0, 4.0, 0);
-                        if (towers[1] == NULL)
-                            towers[1] = new Tower(-4.0, -4.0, 0);
-                        if (towers[2] == NULL)
-                            towers[2] = new Tower(4.0, -4.0, 0);
-                        if (towers[3] == NULL)
-                            towers[3] = new Tower(-4.0, 0.0, 0);
-                        if (towers[4] == NULL)
-                            towers[4] = new Tower(4.0, 0.0, 0);
-                        if (towers[5] == NULL)
-                            towers[5] = new Tower(0.0, -4.0, 0);
-                    }
+                    //    if (towers[0] == NULL)
+                    //        towers[0] = new Tower(0.0, 4.0, 0);
+                    //    if (towers[1] == NULL)
+                    //        towers[1] = new Tower(-4.0, -4.0, 0);
+                    //    if (towers[2] == NULL)
+                    //        towers[2] = new Tower(4.0, -4.0, 0);
+                    //    if (towers[3] == NULL)
+                    //        towers[3] = new Tower(-4.0, 0.0, 0);
+                    //    if (towers[4] == NULL)
+                    //        towers[4] = new Tower(4.0, 0.0, 0);
+                    //    if (towers[5] == NULL)
+                    //        towers[5] = new Tower(0.0, -4.0, 0);
+                    //}
                     F.spawnWave();
                 }
                 else if (event.key.keysym.scancode == SDL_SCANCODE_0)
