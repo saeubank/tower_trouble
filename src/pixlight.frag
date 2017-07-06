@@ -19,8 +19,8 @@ void main()
    //  Diffuse light is cosine of light and normal vectors
    float Id = max(dot(L,N) , 0.0);
    //  Specular is cosine of reflected and view vectors
-   float Is = (Id>0.0) ? pow(max(dot(R,V),0.0) , gl_FrontMaterial.shininess) : 0.0;
-   //float Is = 0.0;
+   //float Is = (Id>0.0) ? pow(max(dot(R,V),0.0) , gl_FrontMaterial.shininess) : 0.0;
+   float Is = 0.0;
 
    //  Sum color types
    gl_FragColor = gl_FrontMaterial.emission
