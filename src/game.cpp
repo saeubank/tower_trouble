@@ -515,7 +515,8 @@ void physics()
                 enemies[i]->animate();
 
                 // if enemy has reached the exit
-                if (enemies[i]->x == 8.0 && enemies[i]->y == 6.0)
+                //cout << fabs(enemies[i]->x - (F.getGoal().first*2.0 - F.getWidth())) << "\t" << fabs(enemies[i]->y - (F.getGoal().second*2.0 - F.getHeight())) << endl;
+                if (fabs(enemies[i]->x - (F.getGoal().first*2.0 - F.getWidth())) < 0.1 && fabs(enemies[i]->y - (F.getGoal().second*2.0 - F.getHeight())) < 0.1)
                 {
                     F.decrementLives();
                     delete enemies[i];
