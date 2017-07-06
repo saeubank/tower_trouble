@@ -1,6 +1,7 @@
 /* C file take connects MySQL to Database server */
 #include <mysql.h>
 #include <stdio.h>
+#include <db.sql>
 
 main() {
    MYSQL *connection;
