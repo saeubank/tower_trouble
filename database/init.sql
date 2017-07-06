@@ -12,7 +12,7 @@ create table highscores (id int not null AUTO_INCREMENT, user VARCHAR(6), score 
 insert into highscores (user, score) values ("nelson", 100000),
                                             ("samuel", 1000000),
                                             ("theo",10000000),
-                                            ("mahalia, 10000000),
+                                            ("mahalia", 10000000),
                                             ("jordan", 100000000);
 
 -- display the highscores in order of highest score so we know it worked
