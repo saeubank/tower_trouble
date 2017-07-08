@@ -17,10 +17,12 @@ https://github.com/swamulism/tower_trouble/blob/master/Tower_Trouble_Demo.mov
 https://github.com/swamulism/tower_trouble
 
 ### Commits
-(image is only commits for master I believe)
+(image is only commits for master)
 ![alt text](https://github.com/swamulism/tower_trouble/blob/master/commits.PNG)
 
 ### Deployment 
+Download source files, compile code, then start up local database.
+**when you lose the game you need to type your name in terminal for gameover screen**
 
 ### Other
 - Repo structure
