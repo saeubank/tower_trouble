@@ -22,6 +22,8 @@ _Warning: do not block path to exit, game will crash!_
 
 ## Requirements
 
+start up local server with SQL and then do ``source .../path-to/tower-trouble/db/init.sql``
+
 Mac:
 
 ```
