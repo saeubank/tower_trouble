@@ -1,6 +1,6 @@
 # Tower Trouble
 
-![alt text](https://github.com/swamulism/tower_trouble/tree/master/other/TowerTLogo1.png "Tower Trouble")
+![alt text](https://github.com/swamulism/tower_trouble/blob/master/other/TowerTLogo1.png "Tower Trouble")
 
 - Match 3* Tower Defense
 - Language: c++
