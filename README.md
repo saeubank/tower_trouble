@@ -1,6 +1,6 @@
 # Tower Trouble
 
-![alt text](https://github.com/swamulism/tower_trouble/blob/master/other/TowerTLogo1.png "Tower Trouble")
+![logo](https://github.com/swamulism/tower_trouble/blob/master/other/TowerTLogo1.png "Tower Trouble")
 
 - Match 3* Tower Defense
 - Language: c++
@@ -20,7 +20,9 @@
 
 _Warning: do not block path to exit, game will crash!_
 
-\* Match 3 not included in Alpha
+[Demo of game linked here](https://github.com/swamulism/tower_trouble/blob/master/Tower_Trouble_Demo.mov "Demo")
+
+\* Match 3 not implemented
 
 ## Requirements
 
