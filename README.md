@@ -20,7 +20,8 @@
 
 _Warning: do not block path to exit, game will crash!_
 
-[Demo of game linked here](https://github.com/swamulism/tower_trouble/blob/master/Tower_Trouble_Demo.mov "Demo")
+Click link to see demo of game:
+[https://youtu.be/ZCZJNA3EY1M](https://youtu.be/ZCZJNA3EY1M)
 
 \* Match 3 not implemented
 
